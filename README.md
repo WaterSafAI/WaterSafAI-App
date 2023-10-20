@@ -61,13 +61,19 @@ Welcome to the frontend development setup of WaterSafAI. This guide will walk yo
     cd WaterSafAI-App/frontend
     ```
 
-2. Install Dependencies:
+2. Install Yarn:
 
     ```
-    npm install
+    npm install -g yarn
     ```
 
-3. Start the Expo Project:
+3. Install Dependencies:
+
+    ```
+    yarn install
+    ```
+
+4. Start the Expo Project:
 
     ```
     npx expo start
