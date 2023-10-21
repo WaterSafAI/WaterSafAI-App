@@ -13,17 +13,7 @@
       "googleServicesFile": "./ios/WaterSafAI/GoogleService-Info.plist"
     },
     "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/perf",
-      "@react-native-firebase/crashlytics",
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "useFrameworks": "static"
-          }
-        }
-      ]
+      "@react-native-firebase/app"
     ]
   }
 }
