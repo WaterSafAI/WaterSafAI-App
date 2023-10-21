@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "858091661652",
+    "project_id": "watersafai",
+    "storage_bucket": "watersafai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858091661652:android:5f58678f758ffdff0000c1",
+        "android_client_info": {
+          "package_name": "com.watersafai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1TWf_di90xvwQ1MACqRwJtMMcLBcnua0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
