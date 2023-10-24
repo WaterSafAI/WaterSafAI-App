@@ -1,20 +1,41 @@
 {
   "expo": {
     "name": "WaterSafAI",
-    "slug": "WaterSafAI",
+    "slug": "watersafai",
     "version": "1.0.0",
+    "icon": "./src/assets/icon.png",
+    "splash": {
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "##ADD8E6"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
-      "googleServicesFile": "./android/app/google-services.json"
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "backgroundColor": "##ADD8E6"
+      },
+      "googleServicesFile": "./android/app/google-services.json",
+      "package": "com.watersafai.app"
     },
     "ios": {
+      "config": {
+        "usesNonExemptEncryption": false
+      },
       "googleServicesFile": "./ios/WaterSafAI/GoogleService-Info.plist"
     },
     "plugins": [
       "@react-native-firebase/app",
-      "@react-native-firebase/auth"
-    ]
+      "@react-native-firebase/auth",
+      "@react-native-google-signin/google-signin"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "315ed25c-cca3-4c0c-904c-ef9118cccce8"
+      }
+    },
+    "owner": "joey-crown"
   }
 }
