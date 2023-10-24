@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "858091661652-in1ommhkdfo2klcreutns322cms6tou4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.watersafai.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "858091661652-vufaedti835kkl5uoaes8drh9ifq96ah.apps.googleusercontent.com",
           "client_type": 3
         }
