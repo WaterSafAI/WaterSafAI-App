@@ -1,5 +1,4 @@
 import React, {createContext, useCallback, useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -9,6 +8,7 @@ import {HomeScreen, Login, Register} from './src/screens/index';
 
 const Stack = createNativeStackNavigator();
 
+// TODO Google sign in button needs implementation
 GoogleSignin.configure({
     webClientId: '858091661652-vufaedti835kkl5uoaes8drh9ifq96ah',
 });
@@ -24,22 +24,22 @@ const NavigatorSettings = {
     },
 }
 
+// Auth context and services could possibly be refactored to its own component
+const AuthContext = createContext(null);
+
+export const useAuth = () => {
+    const authContext = useContext(AuthContext);
+    if (!authContext) {
+        throw new Error('Authentication context not found');
+    }
+    return authContext;
+}
+
 export default function App() {
 
     // Wait for App to Initialize before loading first screen
     const [initialized, setInitialized] = useState(false);
     const [user, setUser] = useState();
-
-    const signUp = (email, password) => {
-        return auth().createUserWithEmailAndPassword(email, password);
-    }
-    const login = (credentials) => {
-        return auth().signInWithCredential(credentials);
-    };
-
-    const logout = () => {
-        return auth().signOut();
-    }
 
     // sets user when authentication state changes
     function onAuthStateChanged(user) {
@@ -65,28 +65,22 @@ export default function App() {
     }
 
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
-      <Stack.Navigator initialRouteName="Login" screenOptions={NavigatorSettings}>
-          {user ? (
-              <>
-                <Stack.Screen component={HomeScreen}  name={"Home"} />
-              </>
-              ) : (
-              <>
-                <Stack.Screen component={<Login onLoginSubmit={login} />}  name={"Log in"} />
-                <Stack.Screen component={<Register onRegisterSubmit={signUp} />}  name={"Register"} />
-              </>
-          )};
-      </Stack.Navigator>
-    </NavigationContainer>
+      <AuthContext.Provider value={{user, setUser}}>
+        <NavigationContainer onReady={onLayoutRootView}>
+          <Stack.Navigator initialRouteName="Login" screenOptions={NavigatorSettings}>
+              {user ? (
+                  <>
+                    <Stack.Screen component={HomeScreen}  name={"Home"} />
+                  </>
+                  ) : (
+                  <>
+                    <Stack.Screen component={ Login }  name={"Log in"} />
+                    <Stack.Screen component={ Register }  name={"Register"} />
+                  </>
+              )};
+          </Stack.Navigator>
+        </NavigationContainer>
+    </AuthContext.Provider>
+
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ADD8E6',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

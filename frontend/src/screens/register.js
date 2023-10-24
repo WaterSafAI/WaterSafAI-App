@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View, Image, Text } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import auth from '@react-native-firebase/auth';
+import {useAuth} from "../../App";
 
-function Register({ navigation, onRegisterSubmit }) {
+function Register({ navigation }) {
+
+    const { setUser } = useAuth();
 
     const [userInfo, setUserInfo] = useState({
         name: '',
@@ -15,8 +18,12 @@ function Register({ navigation, onRegisterSubmit }) {
     const onPressCreate = () => {
         //TODO save user name to their profile
         // TODO set up user access roles
-        onRegisterSubmit(userInfo.email, userInfo.password)
-            .then(() => console.log('User account created!'))
+        // TODO Validate userInfo to conform with secure password standards
+        auth().createUserWithEmailAndPassword(userInfo.email, userInfo.password)
+            .then((userCredential) => {
+                setUser(userCredential.user);
+                console.log('User account created!');
+            })
             .catch(error => {
                 if (error.code === 'auth/email-already-in-use') {
                     console.log('That email address is already in use!');
@@ -85,7 +92,7 @@ function Register({ navigation, onRegisterSubmit }) {
                     },
                     styles.loginBtn,
                 ]}>
-                <Text style={styles.btnText}>LOG IN</Text>
+                <Text style={styles.btnText}>CREATE</Text>
             </Pressable>
         </View>
     );

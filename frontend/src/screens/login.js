@@ -2,20 +2,24 @@ import React, { useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View, Image, Text } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import auth from '@react-native-firebase/auth';
+import {useAuth} from "../../App";
+function Login({ navigation }) {
 
-
-function Login({ navigation, onLoginSubmit }) {
+    const { setUser } = useAuth();
 
     const [userInfo, setUserInfo] = useState({
         email: '',
         password: '',
     })
-
     const onPressLogin = () => {
+
         const provider = auth.EmailAuthProvider;
         const authCredential = provider.credential(userInfo.email, userInfo.password);
-        onLoginSubmit(authCredential)
-            .then(() => console.log('User account signed in!'))
+        auth().signInWithCredential(authCredential)
+            .then((userCredential) => {
+                setUser(userCredential.user);
+                console.log('User account signed in!');
+            })
             .catch(error => {
                 if (error.code === 'auth/user-not-found') {
                     console.log("This email is not yet registered.");
@@ -111,7 +115,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         margin: 20
     }
-    
 });
 
 export default Login;

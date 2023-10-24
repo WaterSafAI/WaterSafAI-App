@@ -17,14 +17,14 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ADD8E6"
       },
-      "googleServicesFile": "./android/app/google-services.json",
+      "googleServicesFile": "./firebase/google-services.json",
       "package": "com.watersafai.app"
     },
     "ios": {
       "config": {
         "usesNonExemptEncryption": false
       },
-      "googleServicesFile": "./ios/WaterSafAI/GoogleService-Info.plist"
+      "googleServicesFile": "./firebase/GoogleService-Info.plist"
     },
     "plugins": [
       "@react-native-firebase/app",
