@@ -1,4 +1,5 @@
-import { Login } from './login';
-import { HomeScreen } from './homeScreen'
+import Login from './login';
+import HomeScreen from './homeScreen';
+import Register from "./register";
 
-export { Login, HomeScreen };
+export { Login, HomeScreen, Register };

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, TextInput, TouchableHighlight, View } from 'react-native';
-import { Screen, Inputs, Color, Buttons } from '../styles/index';
+import { Pressable, StyleSheet, TextInput, View, Image, Text } from 'react-native';
+import { Screens, Inputs, Color, Buttons } from '../styles/index';
+import auth from '@react-native-firebase/auth';
 
-function Login(props) {
+
+function Login({ navigation, onLoginSubmit }) {
 
     const [userInfo, setUserInfo] = useState({
         email: '',
@@ -10,23 +12,40 @@ function Login(props) {
     })
 
     const onPressLogin = () => {
-
+        const provider = auth.EmailAuthProvider;
+        const authCredential = provider.credential(userInfo.email, userInfo.password);
+        onLoginSubmit(authCredential)
+            .then(() => console.log('User account signed in!'))
+            .catch(error => {
+                if (error.code === 'auth/user-not-found') {
+                    console.log("This email is not yet registered.");
+                }
+                if (error.code === 'auth/wrong-password') {
+                    console.log("Invalid password.");
+                }
+                console.log(error);
+            })
     }
 
     const onPressForgotPassword = () => {
-
+        // TODO add firebase forgot email form
     }
 
     const onPressSignUp = () => {
-
+        navigation.push("Register");
     }
 
     return (
         <View style={styles.container}>
-            <Image source={require('../assets/logo-img.png')} style={{width: 100, height: 100}}/>
+            <Text style={{color: Color.logo, fontSize: 32, marginTop: 50}}>
+                WaterSaf
+                <Text style={{fontWeight: 'bold'}}>AI</Text>
+            </Text>
+            <Image source={require('../assets/logo-img.png')} style={{width: 150, height: 150, marginBottom: 20}}/>
             <View style={styles.inputView}>
                 <TextInput 
                     style={styles.inputText}
+                    fontSize={18}
                     placeholder='Email'
                     placeholderTextColor={Color.inputs.text}
                     onChangeText={text => setUserInfo({email:text})}
@@ -36,12 +55,13 @@ function Login(props) {
                 <TextInput 
                     style={styles.inputText}
                     secureTextEntry
+                    fontSize={18}
                     placeholder='Password'
                     placeholderTextColor={Color.inputs.text}
                     onChangeText={text => setUserInfo({password:text})}
                     />
             </View>
-            <Pressable onPress={onPressForgotPassword}>
+            <Pressable onPress={onPressForgotPassword} style={{margin: 20}}>
                 <Text style={styles.linkText}>Forgot Password?</Text>
             </Pressable>
             <Pressable
@@ -56,7 +76,7 @@ function Login(props) {
             </Pressable>
             <View style={styles.registerView}>
                 <Text style={styles.registerText}>Don't have an account?</Text>
-                <Pressable style={{marginLeft: 4}}>
+                <Pressable onPress={onPressSignUp} style={{marginLeft: 4}}>
                     <Text style={styles.linkText}>Sign Up</Text>
                 </Pressable>
             </View>
@@ -66,7 +86,7 @@ function Login(props) {
 
 const styles = StyleSheet.create({
     container: {
-        ...Screen.Login
+        ...Screens.mainScreen
     },
     inputView: {
         ...Inputs.fieldContainer
@@ -80,21 +100,18 @@ const styles = StyleSheet.create({
         ...Inputs.links
     },
     loginBtn: {
-        ...Buttons.loginButton
+        ...Buttons.buttonContainer
     },
     btnText: {
         ...Buttons.buttonText
     },
     registerView: {
-        flex: 2,
         flexDirection: 'row',
         justifyContent:'center',
-        alignItems: 'center', 
-        width: "80%",
-        padding: 20,
+        alignItems: 'center',
+        margin: 20
     }
-
     
-})
+});
 
 export default Login;

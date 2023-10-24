@@ -5,5 +5,5 @@ export const mainScreen = {
     backgroundColor: screens.background,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
 }

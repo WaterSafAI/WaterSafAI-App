@@ -5,7 +5,7 @@ export const buttonContainer = {
     height: 60,
     borderRadius: 15,
     justifyContent: "center",
-    padding: 10,
+    padding: 15,
     borderWidth: 3,
 }
 
@@ -17,4 +17,20 @@ export const buttonText = {
     fontWeight: 'bold',
     fontSize: 22,
     color: inputButton.text,
+    textAlign: 'center'
+}
+
+export const planButton = {
+    width: "40%",
+    height: 45,
+    borderRadius: 20,
+    borderWidth: 3,
+    justifyContent: "center",
+    borderColor: '#0A3465'
+}
+
+export const planText = {
+    fontWeight: 'bold',
+    fontSize: 17,
+    textAlign: 'center'
 }

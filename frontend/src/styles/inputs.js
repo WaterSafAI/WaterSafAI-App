@@ -6,7 +6,8 @@ export const fieldContainer = {
     backgroundColor: inputs.fill,
     borderRadius: 15,
     justifyContent: "center",
-    padding: 20,
+    padding: 10,
+    margin:10,
     borderWidth: 3,
     borderColor: inputs.outline
 }
