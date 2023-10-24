@@ -7,7 +7,7 @@
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "##ADD8E6"
+      "backgroundColor": "#ADD8E6"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -15,7 +15,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "##ADD8E6"
+        "backgroundColor": "#ADD8E6"
       },
       "googleServicesFile": "./android/app/google-services.json",
       "package": "com.watersafai.app"
