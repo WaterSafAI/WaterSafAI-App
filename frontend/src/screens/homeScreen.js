@@ -1,26 +1,16 @@
 import React from 'react';
 import {StyleSheet, View, Text, Pressable} from 'react-native';
 import {Color, Screens, Buttons} from '../styles/index';
-import {useAuth} from "../../App";
-import auth from '@react-native-firebase/auth';
+import {useAuth} from "../services/AuthProvider";
 
 function HomeScreen(props) {
-    const { setUser } = useAuth();
-
-    const onPressSignOut = () => {
-        auth()
-            .signOut()
-            .then(() => {
-                setUser(null);
-                console.log('User signed out!');
-            });
-    }
+    const { actions } = useAuth();
 
     return (
     <View style={styles.container}>
       <Text>Home Screen</Text>
         <Pressable
-            onPress={onPressSignOut}
+            onPress={() => actions.logout()}
             style={({pressed}) => [
                 {
                     backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill

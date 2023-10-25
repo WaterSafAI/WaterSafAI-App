@@ -1,42 +1,23 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View, Image, Text } from 'react-native';
+import {Pressable, StyleSheet, TextInput, View, Image, Text} from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
-import auth from '@react-native-firebase/auth';
-import {useAuth} from "../../App";
+import {useAuth} from "../services/AuthProvider";
+import Loading from "../components/loading";
 function Login({ navigation }) {
-
-    const { setUser } = useAuth();
-
     const [userInfo, setUserInfo] = useState({
         email: '',
         password: '',
     })
-    const onPressLogin = () => {
 
-        const provider = auth.EmailAuthProvider;
-        const authCredential = provider.credential(userInfo.email, userInfo.password);
-        auth().signInWithCredential(authCredential)
-            .then((userCredential) => {
-                setUser(userCredential.user);
-                console.log('User account signed in!');
-            })
-            .catch(error => {
-                if (error.code === 'auth/user-not-found') {
-                    console.log("This email is not yet registered.");
-                }
-                if (error.code === 'auth/wrong-password') {
-                    console.log("Invalid password.");
-                }
-                console.log(error);
-            })
-    }
+    const { actions, loading } = useAuth();
 
     const onPressForgotPassword = () => {
         // TODO add firebase forgot email form
+        console.log("Forgot Password Link");
     }
 
-    const onPressSignUp = () => {
-        navigation.push("Register");
+    if (loading) {
+        return <Loading/>
     }
 
     return (
@@ -65,11 +46,11 @@ function Login({ navigation }) {
                     onChangeText={text => setUserInfo({password:text})}
                     />
             </View>
-            <Pressable onPress={onPressForgotPassword} style={{margin: 20}}>
+            <Pressable onPress={() => onPressForgotPassword()} style={{margin: 20}}>
                 <Text style={styles.linkText}>Forgot Password?</Text>
             </Pressable>
             <Pressable
-                onPress={onPressLogin}
+                onPress={() => actions.login(userInfo.email, userInfo.password)}
                 style={({pressed}) => [
                     {
                     backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
@@ -79,8 +60,8 @@ function Login({ navigation }) {
                 <Text style={styles.btnText}>LOG IN</Text>
             </Pressable>
             <View style={styles.registerView}>
-                <Text style={styles.registerText}>Don't have an account?</Text>
-                <Pressable onPress={onPressSignUp} style={{marginLeft: 4}}>
+                <Text style={{fontSize: 15, fontWeight: 'bold'}}>Don't have an account?</Text>
+                <Pressable onPress={() => navigation.push("Register")} style={{marginLeft: 4}}>
                     <Text style={styles.linkText}>Sign Up</Text>
                 </Pressable>
             </View>

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
-import auth from '@react-native-firebase/auth';
-import {useAuth} from "../../App";
+import {useAuth} from "../services/AuthProvider";
+import Loading from "../components/loading";
 
 function Register({ navigation }) {
 
-    const { setUser } = useAuth();
+    const { loading, actions } = useAuth();
 
     const [userInfo, setUserInfo] = useState({
         name: '',
@@ -15,24 +15,15 @@ function Register({ navigation }) {
         plan: 'personal'
     });
 
-    const onPressCreate = () => {
-        //TODO save user name to their profile
+   const onPressCreate = () => {
         // TODO set up user access roles
         // TODO Validate userInfo to conform with secure password standards
-        auth().createUserWithEmailAndPassword(userInfo.email, userInfo.password)
-            .then((userCredential) => {
-                setUser(userCredential.user);
-                console.log('User account created!');
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
-                console.error(error);
-            })
+
+        actions.register(userInfo.name, userInfo.email, userInfo.password);
+    }
+
+    if (loading) {
+        return <Loading/>
     }
 
     return (
@@ -70,14 +61,14 @@ function Register({ navigation }) {
             </View>
             <View style={styles.planView}>
                 <Pressable
-                    onPress={setUserInfo({plan: 'personal'})}
+                    onPress={() => setUserInfo({plan: 'personal'})}
                     style={[{backgroundColor: userInfo.plan === 'personal' ? '#0A3465' : '#ADD8E6'},
                     styles.planBtn]}>
                     <Text style={[{color: userInfo.plan === 'personal' ? '#ADD8E6' : '#0A3465'},
                         styles.planText]}>Personal</Text>
                 </Pressable>
                 <Pressable
-                    onPress={setUserInfo({plan: 'professional'})}
+                    onPress={() => setUserInfo({plan: 'professional'})}
                     style={[{backgroundColor: userInfo.plan === 'professional' ? '#0A3465' : '#ADD8E6'},
                     styles.planBtn]}>
                     <Text style={[{color: userInfo.plan === 'professional' ? '#ADD8E6' : '#0A3465'},
@@ -85,7 +76,7 @@ function Register({ navigation }) {
                 </Pressable>
             </View>
             <Pressable
-                onPress={onPressCreate}
+                onPress={() => onPressCreate()}
                 style={({pressed}) => [
                     {
                         backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
@@ -121,6 +112,7 @@ const styles = StyleSheet.create({
         ...Buttons.buttonText
     },
     planView: {
+        width: "80%",
         height: 45,
         flexDirection: 'row',
         justifyContent:'space-between',
