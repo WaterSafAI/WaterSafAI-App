@@ -21,7 +21,7 @@ export const buttonText = {
 }
 
 export const planButton = {
-    width: "40%",
+    width: "45%",
     height: 45,
     borderRadius: 20,
     borderWidth: 3,
