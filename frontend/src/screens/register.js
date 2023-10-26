@@ -8,18 +8,16 @@ function Register({ navigation }) {
 
     const { loading, actions } = useAuth();
 
-    const [userInfo, setUserInfo] = useState({
-        name: '',
-        email: '',
-        password: '',
-        plan: 'personal'
-    });
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [plan, setPlan] = useState("personal")
 
    const onPressCreate = () => {
         // TODO set up user access roles
         // TODO Validate userInfo to conform with secure password standards
 
-        actions.register(userInfo.name, userInfo.email, userInfo.password);
+        actions.register(name, email, password);
     }
 
     if (loading) {
@@ -37,7 +35,7 @@ function Register({ navigation }) {
                     fontSize={18}
                     placeholder='Name'
                     placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setUserInfo({name: text})}
+                    onChangeText={text => setName(text)}
                 />
             </View>
             <View style={styles.inputView}>
@@ -46,7 +44,7 @@ function Register({ navigation }) {
                     fontSize={18}
                     placeholder='Email'
                     placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setUserInfo({email: text})}
+                    onChangeText={text => setEmail(text)}
                 />
             </View>
             <View style={styles.inputView}>
@@ -56,27 +54,27 @@ function Register({ navigation }) {
                     fontSize={18}
                     placeholder='Password'
                     placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setUserInfo({password: text})}
+                    onChangeText={text => setPassword(text)}
                 />
             </View>
             <View style={styles.planView}>
                 <Pressable
-                    onPress={() => setUserInfo({plan: 'personal'})}
-                    style={[{backgroundColor: userInfo.plan === 'personal' ? '#0A3465' : '#ADD8E6'},
+                    onPress={() => setPlan('personal')}
+                    style={[{backgroundColor: plan === 'personal' ? '#0A3465' : '#ADD8E6'},
                     styles.planBtn]}>
-                    <Text style={[{color: userInfo.plan === 'personal' ? '#ADD8E6' : '#0A3465'},
+                    <Text style={[{color: plan === 'personal' ? '#ADD8E6' : '#0A3465'},
                         styles.planText]}>Personal</Text>
                 </Pressable>
                 <Pressable
-                    onPress={() => setUserInfo({plan: 'professional'})}
-                    style={[{backgroundColor: userInfo.plan === 'professional' ? '#0A3465' : '#ADD8E6'},
+                    onPress={() => setPlan('professional')}
+                    style={[{backgroundColor: plan === 'professional' ? '#0A3465' : '#ADD8E6'},
                     styles.planBtn]}>
-                    <Text style={[{color: userInfo.plan === 'professional' ? '#ADD8E6' : '#0A3465'},
+                    <Text style={[{color: plan === 'professional' ? '#ADD8E6' : '#0A3465'},
                         styles.planText]}>Professional</Text>
                 </Pressable>
             </View>
             <Pressable
-                onPress={() => onPressCreate()}
+                onPress={onPressCreate}
                 style={({pressed}) => [
                     {
                         backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
