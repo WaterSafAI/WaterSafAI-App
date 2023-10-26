@@ -4,10 +4,8 @@ import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import {useAuth} from "../services/AuthProvider";
 import Loading from "../components/loading";
 function Login({ navigation }) {
-    const [userInfo, setUserInfo] = useState({
-        email: '',
-        password: '',
-    })
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
 
     const { actions, loading } = useAuth();
 
@@ -33,7 +31,7 @@ function Login({ navigation }) {
                     fontSize={18}
                     placeholder='Email'
                     placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setUserInfo({email:text})}
+                    onChangeText={text => setEmail(text)}
                     />
             </View>
             <View style={styles.inputView}>
@@ -43,14 +41,14 @@ function Login({ navigation }) {
                     fontSize={18}
                     placeholder='Password'
                     placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setUserInfo({password:text})}
+                    onChangeText={text => setPassword(text)}
                     />
             </View>
             <Pressable onPress={() => onPressForgotPassword()} style={{margin: 20}}>
                 <Text style={styles.linkText}>Forgot Password?</Text>
             </Pressable>
             <Pressable
-                onPress={() => actions.login(userInfo.email, userInfo.password)}
+                onPress={() => actions.login(email, password)}
                 style={({pressed}) => [
                     {
                     backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
