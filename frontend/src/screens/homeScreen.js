@@ -6,20 +6,24 @@ import {useAuth} from "../services/AuthProvider";
 function HomeScreen(props) {
     const { actions } = useAuth();
 
+    const handleLogout = () => {
+        actions.logout()
+    }
+
     return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-        <Pressable
-            onPress={() => actions.logout()}
-            style={({pressed}) => [
-                {
-                    backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
-                },
-                styles.loginBtn,
-            ]}>
-            <Text style={styles.btnText}>SIGN OUT</Text>
-        </Pressable>
-    </View>
+        <View style={styles.container}>
+            <Text>Home Screen</Text>
+            <Pressable
+                onPress={handleLogout}
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+                    },
+                    styles.loginBtn,
+                ]}>
+                <Text style={styles.btnText}>SIGN OUT</Text>
+            </Pressable>
+        </View>
     );
 }
 
