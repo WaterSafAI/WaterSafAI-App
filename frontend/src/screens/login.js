@@ -9,6 +9,10 @@ function Login({ navigation }) {
 
     const { actions, loading } = useAuth();
 
+    const handleLogin = () => {
+        actions.login(email, password)
+    }
+
     const onPressForgotPassword = () => {
         // TODO add firebase forgot email form
         console.log("Forgot Password Link");
@@ -48,7 +52,7 @@ function Login({ navigation }) {
                 <Text style={styles.linkText}>Forgot Password?</Text>
             </Pressable>
             <Pressable
-                onPress={() => actions.login(email, password)}
+                onPress={handleLogin}
                 style={({pressed}) => [
                     {
                     backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill

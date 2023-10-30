@@ -13,7 +13,7 @@ function Register({ navigation }) {
     const [password, setPassword] = useState("")
     const [plan, setPlan] = useState("personal")
 
-   const onPressCreate = () => {
+   const handleRegister = () => {
         // TODO set up user access roles
         // TODO Validate userInfo to conform with secure password standards
 
@@ -74,7 +74,7 @@ function Register({ navigation }) {
                 </Pressable>
             </View>
             <Pressable
-                onPress={onPressCreate}
+                onPress={handleRegister}
                 style={({pressed}) => [
                     {
                         backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
