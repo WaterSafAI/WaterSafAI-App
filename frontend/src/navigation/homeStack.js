@@ -1,6 +1,9 @@
 import React from 'react';
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {HomeScreen} from "../screens";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { HomeScreen, ProfileScreen, EditProfileScreen } from "../screens";
+import { TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,9 +19,36 @@ const HomeNavigatorSettings = {
 }
 
 const HomeStack = () => {
+    const navigation = useNavigation()
+
     return (
         <Stack.Navigator screenOptions={HomeNavigatorSettings}>
-            <Stack.Screen component={HomeScreen}  name={"Home"} />
+            <Stack.Screen
+                component={HomeScreen}
+                name={"Home"}
+                options={{
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+                            <FontAwesome name="user-circle" size={24} color="black" />
+                        </TouchableOpacity>
+                    ),
+                }}
+            />
+            <Stack.Screen 
+                component={ProfileScreen} 
+                name={"Profile"} 
+                options={{
+                    headerRight: () => (
+                        <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
+                            <FontAwesome name="pencil" size={24} color="black" />
+                        </TouchableOpacity>
+                    ),
+                }}
+            />
+            <Stack.Screen 
+                component={EditProfileScreen} 
+                name={"Edit Profile"} 
+            />
         </Stack.Navigator>
     );
 };
