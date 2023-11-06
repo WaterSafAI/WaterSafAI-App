@@ -8,6 +8,10 @@ function ProfileScreen({ navigation }) {
         // Handle reset
     }
 
+    const handleDeleteAccount = () => {
+        // Handle delete acoount
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.userName}>Josh Simmons</Text>
@@ -41,6 +45,17 @@ function ProfileScreen({ navigation }) {
                     styles.resetBtn,
                 ]}>
                 <Text style={styles.btnText}>Reset Password</Text>
+            </Pressable>
+
+            <Pressable
+                onPress={handleDeleteAccount}
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+                    },
+                    styles.resetBtn,
+                ]}>
+                <Text style={styles.btnText}>Delete Account</Text>
             </Pressable>
         </View>
     );
