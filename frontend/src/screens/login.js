@@ -13,7 +13,7 @@ function Login({ navigation }) {
         actions.login(email, password)
     }
 
-    const onPressForgotPassword = () => {
+    const handleForgotPassword = () => {
         // TODO add firebase forgot email form
         console.log("Forgot Password Link");
     }
@@ -48,7 +48,7 @@ function Login({ navigation }) {
                     onChangeText={text => setPassword(text)}
                     />
             </View>
-            <Pressable onPress={() => onPressForgotPassword()} style={{margin: 20}}>
+            <Pressable onPress={handleForgotPassword} style={{margin: 20}}>
                 <Text style={styles.linkText}>Forgot Password?</Text>
             </Pressable>
             <Pressable
