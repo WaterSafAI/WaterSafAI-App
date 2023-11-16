@@ -1,11 +1,156 @@
 const express = require('express');
+const { db } = require('./firebase');
+const { collection, getDocs, doc, getDoc, updateDoc, deleteDoc } = require('firebase/firestore');
+
+// Init express
 const app = express();
 
+// Home
 app.get('/', (req, res) => {
     res.send('Hello World!');
+});
+
+// TODO: Abstract all firebase operations to a separate module
+
+////////////////////
+// User endpoints //
+////////////////////
+
+
+////////////
+// Create //
+////////////
+
+// This is currently handled on the frontend
+
+
+//////////
+// Read //
+//////////
+
+/**
+ * @route GET /users
+ * @description Retrieves a list of all users from the Firestore database.
+ * @access Public
+ * @returns {Object[]} users - An array of user objects.
+ * @returns {string} users[].id - The unique identifier of the user.
+ * @returns {Object} users[].data - The data associated with the user.
+ * @throws {500} - If an error occurs during fetching data from Firestore.
+ */
+app.get('/users', async (req, res) => {
+    try {
+        const usersRef = collection(db, 'users');
+        const snapshot = await getDocs(usersRef);
+        const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        res.json(users);
+    } catch (error) {
+        console.error('Error fetching users: ', error);
+        res.status(500).send('Error fetching users');
+    }
+});
+
+/**
+ * @route GET /users/:id
+ * @description Retrieves a user from the Firestore database by their unique ID.
+ * @access Public
+ * @param {string} id - The unique identifier of the user, obtained from the URL parameter.
+ * @returns {Object} user - The retrieved user object.
+ * @returns {string} user.id - The unique identifier of the user.
+ * @returns {Object} user.data - The data associated with the user.
+ * @throws {404} - If no user is found with the given ID.
+ * @throws {500} - If an error occurs during fetching the user from Firestore.
+ */
+app.get('/users/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const userRef = doc(db, 'users', userId);
+        const docSnapshot = await getDoc(userRef);
+
+        if (docSnapshot.exists()) {
+            const userData = { id: docSnapshot.id, ...docSnapshot.data() };
+            res.json(userData);
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).send('Error fetching user');
+    }
+});
+
+
+////////////
+// Update //
+////////////
+
+/**
+ * @route PATCH /users/:id
+ * @description Updates the specified fields of a user in the Firestore database.
+ * @access Public
+ * @param {string} id - The unique identifier of the user, obtained from the URL parameter.
+ * @body {Object} data - Partial data object containing the fields to be updated.
+ * @returns {204} - Successfully updated the user data.
+ * @throws {404} - If no user is found with the given ID.
+ * @throws {500} - If an error occurs during the update operation.
+ */
+app.patch('/users/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const userData = req.body;
+        const userRef = doc(db, 'users', userId);
+
+        await updateDoc(userRef, userData);
+
+        res.status(204).send();
+    } catch (error) {
+        console.error(`Error updating user ${userId}: ${error}`);
+
+        // Check if the error is related to the user not being found
+        if (error.code === 'not-found') {
+            res.status(404).send('User not found');
+        } else {
+            res.status(500).send('Error updating user');
+        }
+    }
+});
+
+
+////////////
+// Delete //
+////////////
+
+/**
+ * @route DELETE /users/:id
+ * @description Deletes a user from the Firestore database by their unique ID.
+ * @access Public
+ * @param {string} id - The unique identifier of the user, obtained from the URL parameter.
+ * @returns {200} - Successfully deleted the user.
+ * @throws {404} - If no user is found with the given ID.
+ * @throws {500} - If an error occurs during the deletion operation.
+ */
+app.delete('/users/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const userRef = doc(db, 'users', userId);
+
+        await deleteDoc(userRef);
+
+        res.status(200).send('User successfully deleted');
+    } catch (error) {
+        console.error("Error deleting user:", error);
+
+        // Check if the error is related to the user not being found
+        if (error.code === 'not-found') {
+            res.status(404).send('User not found');
+        } else {
+            res.status(500).send('Error deleting user');
+        }
+    }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+module.exports = app;
