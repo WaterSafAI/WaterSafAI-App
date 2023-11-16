@@ -1,22 +1,22 @@
-# WaterSafAI Frontend Development
+# WaterSafAI Project
 
-Welcome to the frontend development setup of WaterSafAI. This guide will walk you through setting up your development environment for both macOS and Windows using Expo.
+Welcome to the WaterSafAI project repository. This guide will walk you through setting up your development environment for both the frontend and backend components of the WaterSafAI application.
 
-## Prerequisites
+## Frontend Development Setup
+
+The frontend of WaterSafAI is developed using Expo. Follow these steps to set up your frontend development environment.
+
+### Prerequisites
 
 1. Node and npm:
 
-- macOS:
+    - macOS: Install using Homebrew:
 
-  - Install using Homebrew:
+        ```
+        brew install node
+        ```
 
-    ```
-    brew install node
-    ```
-
-- Windows:
-
-  - Download the installer from [Node.js official website](https://nodejs.org/en/download).
+    - Windows: Download the installer from [Node.js official website](https://nodejs.org/en/download/).
 
 
 2. Expo CLI:
@@ -25,34 +25,12 @@ Welcome to the frontend development setup of WaterSafAI. This guide will walk yo
     npm install -g expo-cli
     ```
 
-3. Expo Go 
 
-- Download Expo Go from the App or Play Store on your phone.
+3. Expo Go:
 
-<!-- 3. Android Studio (for Android Emulator):
+    - Download Expo Go from the App or Play Store on your phone.
 
-- Download and install [Android Studio](https://developer.android.com/studio).
-
-- local.properties file:
-
-  - If you're planning to use the Android Emulator, after installing Android SDK via Android Studio, you might need to set the SDK location. In `frontend/android`, create or edit the `local.properties` file:
-
-    - macOS:
-
-      ```
-      sdk.dir = /Users/YourUsername/Library/Android/sdk`
-      ```
-
-    - Windows (ensure to escape the backslashes):
-
-      ```
-      sdk.dir = C:\\Users\\YourUsername\\AppData\\Local\\Android\\Sdk
-      ```
-4. iOS Simulator (Only for macOS):
-
-- Download and install Xcode from the Mac App Store. -->
-
-## Getting Started
+### Getting Started
 
 1. Clone the Repository:
 
@@ -73,11 +51,44 @@ Welcome to the frontend development setup of WaterSafAI. This guide will walk yo
     yarn install
     ```
 
-4. Start the Expo Project:
+3. Start the Expo Project:
 
     ```
-    npx expo start
+    npx expo start --dev-client
     ```
 
-    This will open up a new browser window with a QR code. You can scan this QR code using the Expo Go app on your mobile device to see a live preview of your app.
+    This will open up a new browser window with a QR code. Scan this QR code using the Expo Go app on your mobile device to see a live preview of your app.
 
+## Backend Development Setup
+
+The backend of WaterSafAI is built with Node.js and Express. Follow these steps to set up your backend development environment.
+
+### Prerequisites
+
+Ensure you have Node.js and npm installed as described in the frontend prerequisites.
+
+### Setting Up the Backend
+
+1. Navigate to the Backend Directory:
+
+    ```
+    cd WaterSafAI-App/backend
+    ```
+
+2. Install Dependencies:
+
+    ```
+    npm install
+    ```
+
+3. Starting the Server:
+
+    ```
+    npm start
+    ```
+
+    This command will start the Node.js server using Express, which by default listens on http://localhost:3000.
+
+4. Viewing the Server:
+
+    Open your web browser and navigate to http://localhost:3000 to ensure the server is running.
