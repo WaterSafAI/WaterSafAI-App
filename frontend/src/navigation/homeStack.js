@@ -29,7 +29,7 @@ const HomeStack = () => {
                 options={{
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                            <FontAwesome name="user-circle" size={24} color="black" />
+                            <FontAwesome name="gear" size={24} color="black" />
                         </TouchableOpacity>
                     ),
                 }}
