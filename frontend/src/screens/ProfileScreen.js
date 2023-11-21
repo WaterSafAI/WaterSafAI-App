@@ -8,7 +8,7 @@ function ProfileScreen({ navigation }) {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userAccountType, setUserAccountType] = useState('');
-    const { user } = useAuth();
+    const { user, actions } = useAuth();
     const userId = user.uid;
 
     /**
@@ -38,6 +38,19 @@ function ProfileScreen({ navigation }) {
 
     const handleResetPassword = () => {
         // Handle reset
+    }
+
+    const handleDeleteAccount = async () => {
+        try {
+            // Logout user
+            actions.logout();
+
+            // Delete user document
+            const options = { method: "DELETE" }
+            await fetch(`http://10.0.2.2:3000/users/${userId}/`, options);
+        } catch (error) {
+            console.error(`Error fetching user data: ${error}`)
+        }
     }
 
     return (
@@ -74,6 +87,16 @@ function ProfileScreen({ navigation }) {
                 ]}>
                 <Text style={styles.btnText}>Reset Password</Text>
             </Pressable>
+            <Pressable
+                onPress={handleDeleteAccount}
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+                    },
+                    styles.resetBtn,
+                ]}>
+                <Text style={styles.btnText}>Delete Account</Text>
+            </Pressable>
         </View>
     );
 }
@@ -93,7 +116,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     resetBtn: {
-        marginTop: 10,
+        marginTop: 24,
         ...Buttons.buttonContainer
     },
     btnText: {
