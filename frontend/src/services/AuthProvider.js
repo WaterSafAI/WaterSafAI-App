@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useMemo, useState} from 'react';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const AuthContext = createContext({});
 
@@ -15,60 +16,52 @@ const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const actions = useMemo(
-        () => ({
-            login: async (email, password) => {
-                setLoading(true);
-                auth().signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const currentUser = userCredential.user;
-                        console.log('User account signed in!');
-                    })
-                    .catch(error => {
-                        if (error.code === 'auth/user-not-found') {
-                            console.log("This email is not yet registered.");
-                        }
-                        if (error.code === 'auth/wrong-password') {
-                            console.log("Invalid password.");
-                        }
-                        console.log(error);
-                    })
-                    .finally(() => setLoading(false));
-            },
-            register: async (name, email, password) => {
-                setLoading(true);
+    const actions = useMemo(() => ({
+        login: async (email, password) => {
+            setLoading(true);
+            try {
+                const userCredential = await auth().signInWithEmailAndPassword(email, password);
+                const currentUser = userCredential.user;
 
-                auth().createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-
-                        auth().currentUser.updateProfile({displayName: name});
-
-                        const currentUser = userCredential.user;
-
-                        console.log('User account created!');
-                    })
-                    .catch(error => {
-                        if (error.code === 'auth/email-already-in-use') {
-                            console.log('That email address is already in use!');
-                        }
-                        if (error.code === 'auth/invalid-email') {
-                            console.log('That email address is invalid!');
-                        }
-                        console.error(error);
-                    })
-                    .finally(() => setLoading(true))
-            },
-            logout: async () => {
-                auth()
-                    .signOut()
-                    .then(() => {
-                        const currentUser = null;
-                        console.log('User signed out!');
-                    });
+                console.log('User account signed in!');
+            } catch (error) {
+                console.error('Error signing in: ', error);
+            } finally {
+                setLoading(false);
             }
-        }),
-        []
-    )
+        },
+        register: async (name, email, password, plan) => {
+            setLoading(true);
+            try {
+                const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+                const currentUser = userCredential.user;
+
+                // Create a new user document in Firestore
+                await firestore().collection('users').doc(currentUser.uid).set({
+                    displayName: name,
+                    email: email,
+                    isNewUser: true,
+                    plan: plan
+                });
+
+                console.log('User account created!');
+            } catch (error) {
+                console.error('Error registering user: ', error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        logout: async () => {
+            try {
+                await auth().signOut();
+                console.log('User signed out!');
+                // If needed, perform additional actions after successful logout,
+                // like updating the user state.
+            } catch (error) {
+                console.error('Error signing out: ', error);
+            }
+        }        
+    }), [])
 
     return (
         <AuthContext.Provider value={{
