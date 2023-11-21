@@ -60,7 +60,7 @@ function HomeScreen(props) {
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
             <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text>
 
-            {userAccountType === 'personal' ?
+            {userAccountType === 'professional' ?
                 <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
                     <Text style={styles.buttonText}>Add Test Results</Text>
                 </Pressable> : null}
