@@ -60,7 +60,19 @@ const AuthProvider = ({children}) => {
             } catch (error) {
                 console.error('Error signing out: ', error);
             }
-        }        
+        },
+        delete: (userToDelete) => {
+            try {
+                if (userToDelete) {
+                    userToDelete.delete();
+                    console.log('User deleted!');
+                } else {
+                    console.error('User is null. Unable to delete.');
+                }
+            } catch (error) {
+                console.error(`Error deleting user: `, error)
+            }
+        },
     }), [])
 
     return (

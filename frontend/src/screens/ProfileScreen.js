@@ -42,12 +42,8 @@ function ProfileScreen({ navigation }) {
 
     const handleDeleteAccount = async () => {
         try {
-            // Logout user
-            actions.logout();
-
-            // Delete user document
-            const options = { method: "DELETE" }
-            await fetch(`http://10.0.2.2:3000/users/${userId}/`, options);
+            // Delete user
+            actions.delete(user);
         } catch (error) {
             console.error(`Error fetching user data: ${error}`)
         }
