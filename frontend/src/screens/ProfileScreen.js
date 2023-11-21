@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { FontAwesome } from '@expo/vector-icons';
+import { useAuth } from "../services/AuthProvider";
 
 function ProfileScreen({ navigation }) {
+    const { user } = useAuth();
+    // const userId = user.uid;
+    const userId = 'SyvDhW96eWnsp62dEYSb'
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`);
+            const json = await response.json();
+            console.log(json)
+        }
+
+        fetchData();
+    }, [])
+
     const handleResetPassword = () => {
         // Handle reset
     }
