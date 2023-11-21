@@ -93,15 +93,11 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         ...Buttons.buttonContainer,
-        marginVertical: 10,
+        marginVertical: 16,
         backgroundColor: Color.inputButton.fill,
     },
     buttonText: {
         ...Buttons.buttonText,
-    },
-    loginButton: {
-        ...Buttons.loginButton,
-        marginTop: 20,
     },
 })
 
