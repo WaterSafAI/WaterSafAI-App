@@ -42,7 +42,7 @@ function HomeScreen(props) {
 
     const handleAddTestResults = () => {
         // Handle professional add test results
-        console.log('Calling backend to add test results.');
+        navigation.navigate('Add Test Results')
     }
 
     const handleDiscoverWaterQuality = () => {
@@ -60,7 +60,7 @@ function HomeScreen(props) {
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
             <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text>
 
-            {userAccountType === 'professional' ?
+            {userAccountType === 'personal' ?
                 <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
                     <Text style={styles.buttonText}>Add Test Results</Text>
                 </Pressable> : null}

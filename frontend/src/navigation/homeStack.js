@@ -4,6 +4,7 @@ import { HomeScreen, ProfileScreen, EditProfileScreen } from "../screens";
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import AddTestResultsScreen from '../screens/AddTestResultsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +49,10 @@ const HomeStack = () => {
             <Stack.Screen 
                 component={EditProfileScreen} 
                 name={"Edit Profile"} 
+            />
+            <Stack.Screen 
+                component={AddTestResultsScreen} 
+                name={"Add Test Results"} 
             />
         </Stack.Navigator>
     );
