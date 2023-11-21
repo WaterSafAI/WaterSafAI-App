@@ -2313,6 +2313,11 @@
   dependencies:
     plist "^3.1.0"
 
+"@react-native-firebase/firestore@^18.6.1":
+  version "18.6.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-18.6.1.tgz#7517e5c8f23a18cbfc2ae9925e3c5a19c6291bac"
+  integrity sha512-D3jGxNUMJg2D4CF7bdsXGfBAvs1F1XPOJMSqWJNFZnS/3voxiNclqrm4yxIn9ptFAsJHmXqMUHDA0vASxhZDWA==
+
 "@react-native-google-signin/google-signin@^10.0.1":
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-10.0.1.tgz#5ca5208c6677aca7e8b12f73699de3048d9a5a31"
