@@ -1,9 +1,10 @@
 const express = require('express');
 const { db } = require('./firebase');
-const { collection, getDocs, doc, getDoc, updateDoc, deleteDoc } = require('firebase/firestore');
+const { collection, getDocs, doc, getDoc, updateDoc, deleteDoc, addDoc } = require('firebase/firestore');
 
 // Init express
 const app = express();
+app.use(express.json());
 
 // Home
 app.get('/', (req, res) => {
@@ -147,6 +148,53 @@ app.delete('/users/:id', async (req, res) => {
         }
     }
 });
+
+
+/////////////////////////////////
+// User test results endpoints //
+/////////////////////////////////
+
+////////////
+// Create //
+////////////
+
+/**
+ * @route POST /results/:id
+ * @description Adds a test result document to a subcollection under a user's document in Firestore.
+ * @access Public or Private (depending on your requirements)
+ * @param {string} id - The unique identifier of the user, obtained from the URL parameter.
+ * @body {Object} payload - The test results to be stored.
+ * @body {string} payload.result1 - Description of result1.
+ * @body {string} payload.result2 - Description of result2.
+ * @body {string} payload.result3 - Description of result3.
+ * @returns {Object} The newly added test result document along with a success message.
+ * @throws {500} If an error occurs during the database operation.
+ */
+app.post('/results/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const payload = req.body;
+
+        // Reference to the user's document
+        const userRef = doc(db, 'users', userId);
+
+        // Reference to the 'testResults' subcollection in the user's document
+        const resultsRef = collection(userRef, 'testResults');
+
+        // Add the payload as a new document in the 'testResults' subcollection
+        const result = await addDoc(resultsRef, payload);
+
+        res.status(201).json({
+            id: result.id,
+            ...payload,
+            message: 'Test result added successfully.',
+        });
+    } catch (error) {
+        console.error('Error saving test results: ', error);
+        res.status(500).send('Error saving test results');
+    }
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
