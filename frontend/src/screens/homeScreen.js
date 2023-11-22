@@ -57,7 +57,7 @@ function HomeScreen(props) {
 
     const handleViewResults = () => {
         // Handlde view results button
-        console.log('Calling backend to view results');
+        navigation.navigate('View Test Results');
     }
 
     return (
