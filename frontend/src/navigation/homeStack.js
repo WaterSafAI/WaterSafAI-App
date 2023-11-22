@@ -4,6 +4,8 @@ import { HomeScreen, ProfileScreen, EditProfileScreen } from "../screens";
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import AddTestResultsScreen from '../screens/AddTestResultsScreen';
+import ViewResultsScreen from '../screens/ViewResultsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +31,7 @@ const HomeStack = () => {
                 options={{
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                            <FontAwesome name="user-circle" size={24} color="black" />
+                            <FontAwesome name="gear" size={24} color="black" />
                         </TouchableOpacity>
                     ),
                 }}
@@ -48,6 +50,14 @@ const HomeStack = () => {
             <Stack.Screen 
                 component={EditProfileScreen} 
                 name={"Edit Profile"} 
+            />
+            <Stack.Screen 
+                component={AddTestResultsScreen} 
+                name={"Add Test Results"} 
+            />
+            <Stack.Screen 
+                component={ViewResultsScreen} 
+                name={"View Test Results"} 
             />
         </Stack.Navigator>
     );
