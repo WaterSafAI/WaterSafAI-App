@@ -40,6 +40,10 @@ function ProfileScreen({ navigation }) {
         // Handle reset
     }
 
+    const handleLogout = () => {
+        actions.logout();
+    }
+
     const handleDeleteAccount = async () => {
         try {
             // Delete user
@@ -73,6 +77,16 @@ function ProfileScreen({ navigation }) {
                 <Text style={styles.inputText}>Company: Siemens Energy</Text>
             </View>
 
+            <Pressable
+                onPress={handleLogout}
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+                    },
+                    styles.resetBtn,
+                ]}>
+                <Text style={styles.btnText}>Logout</Text>
+            </Pressable>
             <Pressable
                 onPress={handleResetPassword}
                 style={({ pressed }) => [
