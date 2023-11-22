@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { FontAwesome } from '@expo/vector-icons';
+import Toast from 'react-native-toast-message';
 import { useAuth } from "../services/AuthProvider";
 
 function ProfileScreen({ navigation }) {
@@ -46,10 +47,32 @@ function ProfileScreen({ navigation }) {
 
     const handleDeleteAccount = async () => {
         try {
-            // Delete user
+            // Delete user document
+            const options = { method: "DELETE" }
+            const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`, options);
+
+            if (!response.ok) {
+                throw new Error(`Response code: ${response.status}`)
+            }
+
+            // Delete auth user
             actions.delete(user);
+
+            // Show success
+            Toast.show({
+                type: 'success',
+                text1: 'Success',
+                text2: 'Account deleted.',
+                position: 'bottom'
+            });
         } catch (error) {
-            console.error(`Error fetching user data: ${error}`)
+            console.error(`Error fetching user data: ${error}`);
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Error deleting account.',
+                position: 'bottom'
+            });
         }
     }
 
@@ -107,6 +130,7 @@ function ProfileScreen({ navigation }) {
                 ]}>
                 <Text style={styles.btnText}>Delete Account</Text>
             </Pressable>
+            <Toast ref={(ref) => Toast.setRef(ref)} />
         </View>
     );
 }
