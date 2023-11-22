@@ -19,6 +19,11 @@ function HomeScreen(props) {
             try {
                 // Get user document
                 const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`);
+                
+                if (!response.ok) {
+                    throw new Error(`Response code: ${response.status}`);
+                }
+
                 const json = await response.json();
 
                 // Deconstruct user document
