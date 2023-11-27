@@ -1,0 +1,308 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Register Component renders correctly 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#ADD8E6",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "flex-start",
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#0A3465",
+        "fontSize": 32,
+        "fontWeight": "bold",
+        "marginTop": 50,
+      }
+    }
+  >
+    Create Account
+  </Text>
+  <View
+    style={
+      {
+        "backgroundColor": "#D8EBF1",
+        "borderColor": "#644535",
+        "borderRadius": 15,
+        "borderWidth": 3,
+        "height": 60,
+        "justifyContent": "center",
+        "margin": 10,
+        "padding": 10,
+        "width": "80%",
+      }
+    }
+  >
+    <TextInput
+      fontSize={18}
+      onChangeText={[Function]}
+      placeholder="Name"
+      placeholderTextColor="#644535"
+      style={
+        {
+          "height": 60,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      {
+        "backgroundColor": "#D8EBF1",
+        "borderColor": "#644535",
+        "borderRadius": 15,
+        "borderWidth": 3,
+        "height": 60,
+        "justifyContent": "center",
+        "margin": 10,
+        "padding": 10,
+        "width": "80%",
+      }
+    }
+  >
+    <TextInput
+      fontSize={18}
+      onChangeText={[Function]}
+      placeholder="Email"
+      placeholderTextColor="#644535"
+      style={
+        {
+          "height": 60,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      {
+        "backgroundColor": "#D8EBF1",
+        "borderColor": "#644535",
+        "borderRadius": 15,
+        "borderWidth": 3,
+        "height": 60,
+        "justifyContent": "center",
+        "margin": 10,
+        "padding": 10,
+        "width": "80%",
+      }
+    }
+  >
+    <TextInput
+      fontSize={18}
+      onChangeText={[Function]}
+      placeholder="Password"
+      placeholderTextColor="#644535"
+      secureTextEntry={true}
+      style={
+        {
+          "height": 60,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "height": 45,
+        "justifyContent": "space-between",
+        "margin": 20,
+        "width": "80%",
+      }
+    }
+  >
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "backgroundColor": "#0A3465",
+          },
+          {
+            "borderColor": "#0A3465",
+            "borderRadius": 20,
+            "borderWidth": 3,
+            "height": 45,
+            "justifyContent": "center",
+            "width": "45%",
+          },
+        ]
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "color": "#ADD8E6",
+            },
+            {
+              "fontSize": 17,
+              "fontWeight": "bold",
+              "textAlign": "center",
+            },
+          ]
+        }
+      >
+        Personal
+      </Text>
+    </View>
+    <View
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": undefined,
+          "disabled": undefined,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        [
+          {
+            "backgroundColor": "#ADD8E6",
+          },
+          {
+            "borderColor": "#0A3465",
+            "borderRadius": 20,
+            "borderWidth": 3,
+            "height": 45,
+            "justifyContent": "center",
+            "width": "45%",
+          },
+        ]
+      }
+    >
+      <Text
+        style={
+          [
+            {
+              "color": "#0A3465",
+            },
+            {
+              "fontSize": 17,
+              "fontWeight": "bold",
+              "textAlign": "center",
+            },
+          ]
+        }
+      >
+        Professional
+      </Text>
+    </View>
+  </View>
+  <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": undefined,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      [
+        {
+          "backgroundColor": "#66B3CC",
+        },
+        {
+          "borderRadius": 15,
+          "borderWidth": 3,
+          "height": 60,
+          "justifyContent": "center",
+          "padding": 15,
+          "width": "80%",
+        },
+      ]
+    }
+  >
+    <Text
+      style={
+        {
+          "color": "#FFFFFF",
+          "fontSize": 22,
+          "fontWeight": "bold",
+          "textAlign": "center",
+        }
+      }
+    >
+      CREATE
+    </Text>
+  </View>
+</View>
+`;
