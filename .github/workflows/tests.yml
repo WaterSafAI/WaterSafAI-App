@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - devlp
+      - jest
 
 jobs:
   test:
@@ -17,6 +18,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+      
+      - name: Change directory
+        run: cd ./frontend
       
       - name: Install dependencies
         run: yarn install
