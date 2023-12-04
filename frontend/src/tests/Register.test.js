@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import Register from '../screens/Register';
+import { Register } from '../screens';
 import { useAuth } from "../services/AuthProvider";
 
 // Mock the useAuth hook

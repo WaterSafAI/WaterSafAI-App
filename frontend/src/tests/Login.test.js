@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import Login from '../screens/Login';
+import { Login } from '../screens';
 
 // Mock the useAuth hook
 const mockLogin = jest.fn();
