@@ -1,6 +1,6 @@
-import Login from './login';
+import Login from './Login';
 import HomeScreen from './homeScreen';
-import Register from "./register";
+import Register from "./Register";
 import ProfileScreen from './ProfileScreen';
 import EditProfileScreen from './EditProfileScreen';
 
