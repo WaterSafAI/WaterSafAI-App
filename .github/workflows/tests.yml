@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - devlp
-      - jest
 
 jobs:
   test:
@@ -22,16 +21,6 @@ jobs:
       - name: Install dependencies
         run: yarn install
         working-directory: ./frontend
-
-      # Add a new step for logging the contents of the src/screens directory
-      - name: Log contents of src/screens
-        run: ls -l ./frontend/src/screens
-        working-directory: .
-
-      # Add a new step for logging the content of the index.js file
-      - name: Log content of src/screens/index.js
-        run: cat ./frontend/src/screens/index.js
-        working-directory: .
 
       - name: Run tests
         run: yarn test
