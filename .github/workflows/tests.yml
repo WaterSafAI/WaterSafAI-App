@@ -19,11 +19,10 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Change directory
-        run: cd ./frontend
-      
       - name: Install dependencies
         run: yarn install
+        working-directory: ./frontend
 
       - name: Run tests
         run: yarn test
+        working-directory: ./frontend
