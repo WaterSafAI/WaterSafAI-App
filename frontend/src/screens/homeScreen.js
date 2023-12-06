@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Button, PermissionsAndroid } from 'react-native';
 import { Color, Screens, Buttons } from '../styles/index';
 import { useAuth } from '../services/AuthProvider';
+import Geolocation from 'react-native-geolocation-service';
 
 function HomeScreen(props) {
     const [userName, setUserName] = useState();
-    const [userAddress, setUserAddress] = useState({});
+    const [userAddress, setUserAddress] = useState(false);
     const [userAccountType, setUserAccountType] = useState('');
     const { navigation } = props;
     const { user } = useAuth();
@@ -40,8 +41,60 @@ function HomeScreen(props) {
         fetchData();
     }, [user])
 
+    //Get permission for location
+    const requestLocationPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                title: 'Geolocation Permission',
+                message: 'Can we access your location?',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+                },
+            );
+            
+            console.log('granted', granted);
+            if (granted === 'granted') {
+                console.log('You can use Geolocation');
+                return true;
+            } 
+            else {
+                console.log('You cannot use Geolocation');
+                return false;
+            }
+        } 
+        catch (err) {
+            return false;
+        }
+    };
+
+    //Check permissions and get location
+    const getLocation = () => {
+        const result = requestLocationPermission();
+        result.then(res => {
+            console.log('res is:', res);
+            if (res) {
+                Geolocation.getCurrentPosition(
+                position => {
+                    console.log(position);
+                    setUserAddress(position);
+                },
+                error => {
+                    // See error code charts below.
+                    console.log(error.code, error.message);
+                    setLocation(false);
+                },
+                {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+                );
+            }
+        });
+        console.log(userAddress);
+    };
     // Helper function to display the user address
     const userAddressDisplay = () => {
+
         return `${userAddress.street} ${userAddress.city}, ${userAddress.state} ${userAddress.zip}`
     }
 
@@ -63,7 +116,13 @@ function HomeScreen(props) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
-            <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text>
+
+            {/* delete this btn at some point */}
+            <Button title="Get Location" onPress={getLocation} />
+            <Text>Latitude: {userAddress ? userAddress.coords.latitude : null}</Text>
+            <Text>Longitude: {userAddress ? userAddress.coords.longitude : null}</Text>
+
+            {/* <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text> */}
 
             {userAccountType === 'professional' ?
                 <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
