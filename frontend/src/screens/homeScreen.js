@@ -56,7 +56,7 @@ function HomeScreen(props) {
             );
             
             console.log('granted', granted);
-            if (granted === 'granted') {
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('You can use Geolocation');
                 return true;
             } 
@@ -71,26 +71,30 @@ function HomeScreen(props) {
     };
 
     //Check permissions and get location
-    const getLocation = () => {
+    const getLocation = async () => {
         const result = requestLocationPermission();
-        result.then(res => {
-            console.log('res is:', res);
-            if (res) {
+        if (result){
+            if (await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
                 Geolocation.getCurrentPosition(
-                position => {
-                    console.log(position);
-                    setUserAddress(position);
-                },
-                error => {
-                    // See error code charts below.
-                    console.log(error.code, error.message);
-                    setLocation(false);
-                },
-                {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+                    position => {
+                        console.log(position);
+                        setUserAddress(position);
+                    },
+                    error => {
+                        console.log(error.code, error.message);
+                        setUserAddress(null); //set userAddress to null in case of error
+                    },
+                    { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
                 );
+            } else {
+                console.log('Permission denied at runtime');
+                setUserAddress(null);
             }
-        });
-        console.log(userAddress);
+        }
+        else{
+            console.log('Permission denied');
+            setUserAddress(null); //set user address to null when permssion denied
+        }
     };
     // Helper function to display the user address
     const userAddressDisplay = () => {
@@ -117,10 +121,16 @@ function HomeScreen(props) {
         <View style={styles.container}>
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
 
-            {/* delete this btn at some point */}
+            {/* delete this btn at some point and have it automatically ask*/}
             <Button title="Get Location" onPress={getLocation} />
-            <Text>Latitude: {userAddress ? userAddress.coords.latitude : null}</Text>
-            <Text>Longitude: {userAddress ? userAddress.coords.longitude : null}</Text>
+            {userAddress && userAddress.coords ? (
+                <>
+                    <Text>Latitude: {userAddress.coords.latitude}</Text>
+                    <Text>Longitude: {userAddress.coords.longitude}</Text>
+                </>
+            ) : (
+                <Text>Location not available</Text>
+            )}            
 
             {/* <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text> */}
 
@@ -145,7 +155,7 @@ const styles = StyleSheet.create({
         ...Screens.mainScreen
     },
     title: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
         margin: 20,
         color: '#0A3465',
@@ -156,7 +166,7 @@ const styles = StyleSheet.create({
         color: '#0A3465',
     },
     buttonContainer: {
-        ...Buttons.buttonContainer,
+        ...Buttons.homeScreenBtnContainer,
         marginVertical: 16,
         backgroundColor: Color.inputButton.fill,
     },

@@ -1,10 +1,10 @@
 import {inputs} from './colors'
 
 export const fieldContainer = {
-    width: "80%",
+    width: "85%",
     height: 60,
     backgroundColor: inputs.fill,
-    borderRadius: 15,
+    borderRadius: 30,
     justifyContent: "center",
     padding: 10,
     margin:10,

@@ -2,11 +2,21 @@ import {inputButton} from './colors';
 
 export const buttonContainer = {
     width: "80%",
-    height: 60,
+    height: 70,
     borderRadius: 15,
     justifyContent: "center",
     padding: 15,
     borderWidth: 3,
+}
+
+export const homeScreenBtnContainer = {
+    width: "78%",
+    height: 130,
+    borderRadius: 30,
+    justifyContent: "center",
+    padding: 25,
+    borderWidth: 3,
+    borderColor: '#0A3465'
 }
 
 export const loginButton = {

@@ -31,7 +31,7 @@ const HomeStack = () => {
                 options={{
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-                            <FontAwesome name="gear" size={24} color="black" />
+                            <FontAwesome name="gear" size={24} color="#0A3465" />
                         </TouchableOpacity>
                     ),
                 }}
@@ -42,7 +42,7 @@ const HomeStack = () => {
                 options={{
                     headerRight: () => (
                         <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
-                            <FontAwesome name="pencil" size={24} color="black" />
+                            <FontAwesome name="pencil" size={24} color="#0A3465" />
                         </TouchableOpacity>
                     ),
                 }}
