@@ -72,15 +72,17 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     header: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
         marginVertical: 20,
+        color: '#0A3465'
     },
     subHeader: {
         fontSize: 18,
         textAlign: 'center',
         marginVertical: 5,
+        color: '#0A3465'
     },
     resultsContainer: {
         marginVertical: 20,
@@ -108,16 +110,19 @@ const styles = StyleSheet.create({
         width: '50%', // Adjusted to take half the row width
         fontSize: 16,
         fontWeight: 'bold',
+        color: '#644535',
     },
     result: {
         width: '25%', // Adjusted to take a quarter of the row width
         fontSize: 16,
         textAlign: 'right',
+        color: '#644535',
     },
     units: {
         width: '25%', // Adjusted to take a quarter of the row width
         fontSize: 16,
         textAlign: 'left',
+        color: '#644535',
     },
     solutionBtn: {
         marginTop: 24,

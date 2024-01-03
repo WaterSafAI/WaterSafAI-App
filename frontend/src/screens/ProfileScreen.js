@@ -81,22 +81,22 @@ function ProfileScreen({ navigation }) {
             <Text style={styles.userName}>{userName}</Text>
 
             <View style={styles.inputView}>
-                <FontAwesome name="envelope" size={20} color="blue" />
+                <FontAwesome name="envelope" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Email: {userEmail}</Text>
             </View>
 
             <View style={styles.inputView}>
-                <FontAwesome name="briefcase" size={20} color="blue" />
+                <FontAwesome name="briefcase" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Account Type: {userAccountType}</Text>
             </View>
 
             <View style={styles.inputView}>
-                <FontAwesome name="map-marker" size={20} color="blue" />
+                <FontAwesome name="map-marker" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Location: 1234 Research Parkway, Orlando FL 32826</Text>
             </View>
 
             <View style={styles.inputView}>
-                <FontAwesome name="building" size={20} color="blue" />
+                <FontAwesome name="building" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Company: Siemens Energy</Text>
             </View>
 

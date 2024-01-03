@@ -3,6 +3,7 @@ import {Pressable, StyleSheet, TextInput, View, Image, Text} from 'react-native'
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import {useAuth} from "../services/AuthProvider";
 import Loading from "../components/loading";
+
 function Login({ navigation }) {
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
@@ -62,9 +63,9 @@ function Login({ navigation }) {
                 <Text style={styles.btnText}>LOG IN</Text>
             </Pressable>
             <View style={styles.registerView}>
-                <Text style={{fontSize: 15, fontWeight: 'bold'}}>Don't have an account?</Text>
+                <Text style={{fontSize: 15, color: '#644535',fontWeight: 'bold'}}>Don't have an account?</Text>
                 <Pressable onPress={() => navigation.push("Register")} style={{marginLeft: 4}}>
-                    <Text style={styles.linkText}>Sign Up</Text>
+                    <Text style={styles.SignUpText}>Sign Up</Text>
                 </Pressable>
             </View>
         </View>
@@ -84,6 +85,13 @@ const styles = StyleSheet.create({
     linkText: {
         fontSize: 15,
         fontWeight: 'bold',
+        color: '#644535',
+        ...Inputs.links
+    },
+    SignUpText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: '#C24E77',
         ...Inputs.links
     },
     loginBtn: {

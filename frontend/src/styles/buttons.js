@@ -6,7 +6,16 @@ export const buttonContainer = {
     borderRadius: 15,
     justifyContent: "center",
     padding: 15,
+}
+
+export const homeScreenBtnContainer = {
+    width: "78%",
+    height: 130,
+    borderRadius: 30,
+    justifyContent: "center",
+    padding: 25,
     borderWidth: 3,
+    borderColor: '#0A3465'
 }
 
 export const loginButton = {

@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         ...Screens.mainScreen
     },
     title: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
         margin: 20,
         color: '#0A3465',
@@ -96,8 +96,14 @@ const styles = StyleSheet.create({
         margin: 20,
         color: '#0A3465',
     },
+    locationHeader: {
+        fontSize: 18,
+        margin: 20,
+        color: '#0A3465',
+        fontWeight: 'bold',
+    },
     buttonContainer: {
-        ...Buttons.buttonContainer,
+        ...Buttons.homeScreenBtnContainer,
         marginVertical: 16,
         backgroundColor: Color.inputButton.fill,
     },
