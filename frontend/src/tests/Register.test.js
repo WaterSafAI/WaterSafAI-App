@@ -29,8 +29,8 @@ describe('Register Component', () => {
     expect(getByPlaceholderText('Email')).toBeTruthy();
     expect(getByPlaceholderText('Password')).toBeTruthy();
 
-    // const tree = render(<Register navigation={mockNavigation} />).toJSON();
-    // expect(tree).toMatchSnapshot();
+    const tree = render(<Register navigation={mockNavigation} />).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
   it('calls the register function with correct credentials on button press', () => {
