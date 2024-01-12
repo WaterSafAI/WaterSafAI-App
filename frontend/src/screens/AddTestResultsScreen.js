@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
-import Toast from 'react-native-toast-message';
 import { useAuth } from "../services/AuthProvider";
+import Toast from "../components/Toast"
 
 const AddTestResultsScreen = () => {
     const [field1, setField1] = useState('');
     const [field2, setField2] = useState('');
     const [field3, setField3] = useState('');
+    const [toast, setToast] = useState({});
+    const [toastKey, setToastKey] = useState(0);
     const { user } = useAuth();
     const userId = user.uid;
 
@@ -15,14 +17,11 @@ const AddTestResultsScreen = () => {
      * Send a POST request to the backend server with the test results
      */
     const handleAddResults = async () => {
+        setToastKey(toastKey + 1);
+
         // Check if fields are not empty
         if (!field1 || !field2 || !field3) {
-            Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: 'All fields must be filled out.',
-                position: 'bottom'
-            });
+            setToast({type: "error", message: "Please fill out all fields."});
             return;
         }
 
@@ -46,21 +45,11 @@ const AddTestResultsScreen = () => {
             }
 
             // Show success and clear form
-            Toast.show({
-                type: 'success',
-                text1: 'Success',
-                text2: 'Test results added!',
-                position: 'bottom'
-            });
+            setToast({type: "success", message: "Test results added!"});
             clearFields();
         } catch (error) {
             console.error(`Error adding test results: ${error}`);
-            Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: 'Error adding test results.',
-                position: 'bottom'
-            });
+            setToast({type: "error", message: "Error adding test results."});
         }
     }
 
@@ -75,6 +64,7 @@ const AddTestResultsScreen = () => {
 
     return (
         <View style={styles.container}>
+            {toast.message && <Toast key={toastKey} message={toast.message} type={toast.type}/>}
             <Text style={{ color: Color.logo, fontSize: 32, fontWeight: 'bold', marginTop: 50, marginBottom: 30 }}>
                 Add Test Results
             </Text>
@@ -118,7 +108,6 @@ const AddTestResultsScreen = () => {
                 ]}>
                 <Text style={styles.btnText}>Add Results</Text>
             </Pressable>
-            <Toast ref={(ref) => Toast.setRef(ref)} />
         </View>
     );
 }
