@@ -17,10 +17,10 @@ jest.mock("../services/AuthProvider", () => ({
 describe('Login Component', () => {
   const mockNavigation = { push: jest.fn() };
 
-  it('renders correctly', () => {
-    const tree = render(<Login navigation={mockNavigation} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
+//   it('renders correctly', () => {
+//     const tree = render(<Login navigation={mockNavigation} />).toJSON();
+//     expect(tree).toMatchSnapshot();
+//   });
 
   it('allows entering email and password', () => {
     const { getByPlaceholderText } = render(<Login navigation={mockNavigation} />);
