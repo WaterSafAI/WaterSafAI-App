@@ -1,1 +1,1 @@
-export const API_URL = 'https://watersafai.uc.r.appspot.com';
+export const API_URL = 'https://express-backend-dot-watersafai.uc.r.appspot.com';
