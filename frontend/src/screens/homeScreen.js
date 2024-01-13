@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { Color, Screens, Buttons } from '../styles/index';
 import { useAuth } from '../services/AuthProvider';
+import { API_URL } from '../../constants';
 
 function HomeScreen(props) {
     const [userName, setUserName] = useState();
@@ -18,7 +19,7 @@ function HomeScreen(props) {
         const fetchData = async () => {
             try {
                 // Get user document
-                const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`);
+                const response = await fetch(`${API_URL}/users/${userId}/`);
                 
                 if (!response.ok) {
                     throw new Error(`Response code: ${response.status}`);

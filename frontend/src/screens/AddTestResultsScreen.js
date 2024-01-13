@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { useAuth } from "../services/AuthProvider";
 import Toast from "../components/Toast"
+import { API_URL } from '../../constants';
 
 const AddTestResultsScreen = () => {
     const [field1, setField1] = useState('');
@@ -39,7 +40,7 @@ const AddTestResultsScreen = () => {
             body: JSON.stringify(payload)
         };
         try {
-            const response = await fetch(`http://10.0.2.2:3000/results/${userId}/`, options);
+            const response = await fetch(`${API_URL}/results/${userId}/`, options);
             if (!response.ok) {
                 throw new Error(`Response code: ${response.status}`);
             }

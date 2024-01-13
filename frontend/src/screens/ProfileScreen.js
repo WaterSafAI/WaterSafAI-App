@@ -4,6 +4,7 @@ import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { FontAwesome } from '@expo/vector-icons';
 import Toast from '../components/Toast';
 import { useAuth } from "../services/AuthProvider";
+import { API_URL } from '../../constants';
 
 function ProfileScreen({ navigation }) {
     const [userName, setUserName] = useState('');
@@ -21,7 +22,7 @@ function ProfileScreen({ navigation }) {
         const fetchData = async () => {
             try {
                 // Get user document
-                const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`);
+                const response = await fetch(`${API_URL}/users/${userId}/`);
                 const json = await response.json();
 
                 // Deconstruct user document
@@ -52,7 +53,7 @@ function ProfileScreen({ navigation }) {
         try {
             // Delete user document
             const options = { method: "DELETE" }
-            const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`, options);
+            const response = await fetch(`${API_URL}/users/${userId}/`, options);
 
             if (!response.ok) {
                 throw new Error(`Response code: ${response.status}`)
