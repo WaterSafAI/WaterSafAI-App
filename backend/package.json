@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon app.js"
+        "start": "node app.js"
     },
     "keywords": [],
     "author": "",
@@ -15,8 +15,5 @@
         "firebase": "^10.6.0",
         "firebase-admin": "^11.11.0",
         "morgan": "^1.10.0"
-    },
-    "devDependencies": {
-        "nodemon": "^3.0.1"
     }
 }
