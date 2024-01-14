@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { Color, Screens, Buttons } from '../styles/index';
 import { useAuth } from '../services/AuthProvider';
+import * as Location from 'expo-location';
 
 function HomeScreen(props) {
     const [userName, setUserName] = useState();
@@ -40,9 +41,35 @@ function HomeScreen(props) {
         fetchData();
     }, [user])
 
+    const [location, setLocation] = useState({})
+
+    useEffect(() => {
+        
+        (async() => {
+
+            let {status} = await  Location.requestForegroundPermissionsAsync()
+
+            if(status == 'granted'){
+                console.log('Permission granted')
+            }
+            else{
+                console.log('Permission denied')
+            }
+
+            const loc = await Location.getCurrentPositionAsync()
+            console.log(loc)
+
+            setLocation(loc)
+        })()
+
+    }, [])
+
+
     // Helper function to display the user address
     const userAddressDisplay = () => {
-        return `${userAddress.street} ${userAddress.city}, ${userAddress.state} ${userAddress.zip}`
+        
+        // return `${userAddress.street} ${userAddress.city}, ${userAddress.state} ${userAddress.zip}`
+        return <Text>{JSON.stringify(location)}</Text>
     }
 
     const handleAddTestResults = () => {
@@ -63,7 +90,8 @@ function HomeScreen(props) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
-            <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text>
+            {/* <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text> */}
+            <Text>{JSON.stringify(location)}</Text>
 
             {userAccountType === 'professional' ?
                 <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
