@@ -1,10 +1,12 @@
 const express = require('express');
+const morgan = require('morgan');
 const { db } = require('./firebase');
 const { collection, getDocs, doc, getDoc, updateDoc, deleteDoc, addDoc } = require('firebase/firestore');
 
 // Init express
 const app = express();
 app.use(express.json());
+app.use(morgan('dev'));
 
 // Home
 app.get('/', (req, res) => {

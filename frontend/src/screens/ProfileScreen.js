@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { FontAwesome } from '@expo/vector-icons';
-import Toast from 'react-native-toast-message';
+import Toast from '../components/Toast';
 import { useAuth } from "../services/AuthProvider";
+import { API_URL } from '../../constants';
 
 function ProfileScreen({ navigation }) {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userAccountType, setUserAccountType] = useState('');
+    const [toast, setToast] = useState({});
+    const [toastKey, setToastKey] = useState(0);
     const { user, actions } = useAuth();
     const userId = user.uid;
 
@@ -19,7 +22,7 @@ function ProfileScreen({ navigation }) {
         const fetchData = async () => {
             try {
                 // Get user document
-                const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`);
+                const response = await fetch(`${API_URL}/users/${userId}/`);
                 const json = await response.json();
 
                 // Deconstruct user document
@@ -46,10 +49,11 @@ function ProfileScreen({ navigation }) {
     }
 
     const handleDeleteAccount = async () => {
+        setToastKey(toastKey + 1);
         try {
             // Delete user document
             const options = { method: "DELETE" }
-            const response = await fetch(`http://10.0.2.2:3000/users/${userId}/`, options);
+            const response = await fetch(`${API_URL}/users/${userId}/`, options);
 
             if (!response.ok) {
                 throw new Error(`Response code: ${response.status}`)
@@ -59,25 +63,16 @@ function ProfileScreen({ navigation }) {
             actions.delete(user);
 
             // Show success
-            Toast.show({
-                type: 'success',
-                text1: 'Success',
-                text2: 'Account deleted.',
-                position: 'bottom'
-            });
+            setToast({type: "success", message: "Account deleted."});
         } catch (error) {
             console.error(`Error fetching user data: ${error}`);
-            Toast.show({
-                type: 'error',
-                text1: 'Error',
-                text2: 'Error deleting account.',
-                position: 'bottom'
-            });
+            setToast({type: "error", message: "Error deleting account."});
         }
     }
 
     return (
         <View style={styles.container}>
+            {toast.message && <Toast key={toastKey} message={toast.message} type={toast.type} />}
             <Text style={styles.userName}>{userName}</Text>
 
             <View style={styles.inputView}>
@@ -130,7 +125,6 @@ function ProfileScreen({ navigation }) {
                 ]}>
                 <Text style={styles.btnText}>Delete Account</Text>
             </Pressable>
-            <Toast ref={(ref) => Toast.setRef(ref)} />
         </View>
     );
 }
