@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { useAuth } from "../services/AuthProvider";
@@ -11,8 +11,12 @@ const AddTestResultsScreen = () => {
     const [field3, setField3] = useState('');
     const [toast, setToast] = useState({});
     const [toastKey, setToastKey] = useState(0);
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const userId = user.uid;
+
+    useEffect(() => {
+        console.log('user token...', token);
+    }  , [token])
 
     /**
      * Send a POST request to the backend server with the test results
@@ -36,9 +40,11 @@ const AddTestResultsScreen = () => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(payload)
         };
+
         try {
             const response = await fetch(`${API_URL}/results/${userId}/`, options);
             if (!response.ok) {

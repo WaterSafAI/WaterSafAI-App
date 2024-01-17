@@ -8,8 +8,9 @@ function HomeScreen(props) {
     const [userName, setUserName] = useState();
     const [userAddress, setUserAddress] = useState({});
     const [userAccountType, setUserAccountType] = useState('');
+    const [location, setLocation] = useState(null)
     const { navigation } = props;
-    const { user } = useAuth();
+    const { user, token } = useAuth();
     const userId = user.uid;
 
     /**
@@ -17,9 +18,19 @@ function HomeScreen(props) {
      */
     useEffect(() => {
         const fetchData = async () => {
+            console.log('Fetching user data...', token);
             try {
+                // Construct request
+                const options = {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                };
+
                 // Get user document
-                const response = await fetch(`${API_URL}/users/${userId}/`);
+                const response = await fetch(`${API_URL}/users/${userId}/`, options);
                 
                 if (!response.ok) {
                     throw new Error(`Response code: ${response.status}`);
