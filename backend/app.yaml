@@ -10,11 +10,3 @@ resources:
   cpu: 1
   memory_gb: 0.5
   disk_size_gb: 10
-
-env_variables:
-  FIREBASE_API_KEY: "AIzaSyCpSjDZZ-t8htu40kUmHRQoZptNSKQ7MYI"
-  FIREBASE_AUTH_DOMAIN: "watersafai.firebaseapp.com"
-  FIREBASE_PROJECT_ID: "watersafai"
-  FIREBASE_STORAGE_BUCKET: "watersafai.appspot.com"
-  FIREBASE_MESSAGING_SENDER_ID: "858091661652"
-  FIREBASE_APP_ID: "1:858091661652:web:1eb0eb8bda15e1350000c1"

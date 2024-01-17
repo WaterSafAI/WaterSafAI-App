@@ -1,31 +1,42 @@
-// Import the functions you need from the SDKs you need
-const { initializeApp } = require("firebase/app");
-const { getFirestore } = require("firebase/firestore");
-const { getAuth } = require("firebase/auth");
+const admin = require('firebase-admin');
 const dotenv = require("dotenv").config();
+const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
 
+const secretManager = new SecretManagerServiceClient();
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID
-};
+// projects/858091661652/secrets/FIREBASE_SERVICE_ACCOUNT_KEY
+async function getFirebaseAdminCredential() {
+    const projectId = '858091661652';
+    const secretName = 'FIREBASE_SERVICE_ACCOUNT_KEY';
+    const name = `projects/${projectId}/secrets/${secretName}/versions/latest`;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+    try {
+        const [version] = await secretManager.accessSecretVersion({ name });
+        const serviceAccountKey = JSON.parse(version.payload.data.toString('utf8'));
+        return admin.credential.cert(serviceAccountKey);
+    } catch (error) {
+        console.error("Error fetching Firebase Admin credentials:", error);
+        throw error;
+    }
+}
 
-// Initialize Firestore
-const db = getFirestore(app);
+/**
+ * Initialize Firebase and return the db and auth objects.
+ * @returns {Promise<{db: admin.firestore.Firestore, auth: admin.auth.Auth}>}
+ */
+async function initializeFirebase() {
+    const credential = await getFirebaseAdminCredential();
 
-// Initialize Firebase Authentication
-const auth = getAuth(app);
+    admin.initializeApp({
+        credential: credential,
+    });
 
-module.exports = { 
-    app, 
-    db, 
-    auth 
-};
+    const db = admin.firestore();
+    const auth = admin.auth();
+
+    // ... rest of your Firebase setup
+
+    return { db, auth };
+}
+
+module.exports = initializeFirebase;

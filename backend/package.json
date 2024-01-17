@@ -10,6 +10,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@google-cloud/secret-manager": "^5.0.1",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "firebase": "^10.6.0",
