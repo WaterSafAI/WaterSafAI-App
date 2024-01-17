@@ -1,23 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
-const initializeFirebase = require('./firebase');
+const { db, auth } = require('./firebase');
 
 // Init express
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
-
-// Init Firebase
-/** @type {import('firebase-admin').auth.Auth} */
-let auth;
-
-/** @type {import('firebase-admin').firestore.Firestore} */
-let db;
-
-initializeFirebase().then(firebase => {
-    db = firebase.db;
-    auth = firebase.auth;
-});
 
 // Token authentication middleware
 app.use(async (req, res, next) => {
