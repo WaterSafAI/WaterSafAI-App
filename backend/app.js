@@ -1,12 +1,30 @@
 const express = require('express');
 const morgan = require('morgan');
-const { db } = require('./firebase');
-const { collection, getDocs, doc, getDoc, updateDoc, deleteDoc, addDoc } = require('firebase/firestore');
+const { db, auth } = require('./firebase');
 
 // Init express
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
+
+// Token authentication middleware
+app.use(async (req, res, next) => {
+    const token = req.headers.authorization?.split('Bearer ')[1];
+
+    if (!token) {
+        res.status(401).send('Unauthorized');
+        return;
+    }
+
+    try {
+        const decodedToken = await auth.verifyIdToken(token);
+        req.uid = decodedToken.uid;
+        next();
+    } catch (error) {
+        console.error(error);
+        res.status(401).send('Unauthorized');
+    }
+});
 
 // Home
 app.get('/', (req, res) => {
@@ -42,8 +60,8 @@ app.get('/', (req, res) => {
  */
 app.get('/users', async (req, res) => {
     try {
-        const usersRef = collection(db, 'users');
-        const snapshot = await getDocs(usersRef);
+        const usersRef = db.collection('users');
+        const snapshot = await usersRef.get();
         const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         res.json(users);
     } catch (error) {
@@ -66,10 +84,10 @@ app.get('/users', async (req, res) => {
 app.get('/users/:id', async (req, res) => {
     try {
         const userId = req.params.id;
-        const userRef = doc(db, 'users', userId);
-        const docSnapshot = await getDoc(userRef);
+        const userRef = db.doc(`users/${userId}`);
+        const docSnapshot = await userRef.get();
 
-        if (docSnapshot.exists()) {
+        if (docSnapshot.exists) {
             const userData = { id: docSnapshot.id, ...docSnapshot.data() };
             res.json(userData);
         } else {
@@ -100,9 +118,9 @@ app.patch('/users/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const userData = req.body;
-        const userRef = doc(db, 'users', userId);
+        const userRef = db.doc(`users/${userId}`);
 
-        await updateDoc(userRef, userData);
+        await userRef.update(userData);
 
         res.status(204).send();
     } catch (error) {
@@ -134,9 +152,9 @@ app.patch('/users/:id', async (req, res) => {
 app.delete('/users/:id', async (req, res) => {
     try {
         const userId = req.params.id;
-        const userRef = doc(db, 'users', userId);
+        const userRef = db.doc(`users/${userId}`);
 
-        await deleteDoc(userRef);
+        await userRef.delete();
 
         res.status(200).send('User successfully deleted');
     } catch (error) {
@@ -178,13 +196,13 @@ app.post('/results/:id', async (req, res) => {
         const payload = req.body;
 
         // Reference to the user's document
-        const userRef = doc(db, 'users', userId);
+        const userRef = db.collection('users').doc(userId);
 
         // Reference to the 'testResults' subcollection in the user's document
-        const resultsRef = collection(userRef, 'testResults');
+        const resultsRef = userRef.collection('testResults');
 
         // Add the payload as a new document in the 'testResults' subcollection
-        const result = await addDoc(resultsRef, payload);
+        const result = await resultsRef.add(payload);
 
         res.status(201).json({
             id: result.id,
@@ -198,7 +216,7 @@ app.post('/results/:id', async (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

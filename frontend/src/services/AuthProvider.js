@@ -12,7 +12,7 @@ export const useAuth = () => {
     return authContext;
 }
 const AuthProvider = ({children}) => {
-
+    const [token, setToken] = useState(null);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -21,7 +21,11 @@ const AuthProvider = ({children}) => {
             setLoading(true);
             try {
                 const userCredential = await auth().signInWithEmailAndPassword(email, password);
-                const currentUser = userCredential.user;
+                const token = await userCredential.user.getIdToken(true);
+                if (!token) {
+                    throw new Error('Unable to get token');
+                }
+                setToken(token);
 
                 console.log('User account signed in!');
             } catch (error) {
@@ -77,6 +81,7 @@ const AuthProvider = ({children}) => {
 
     return (
         <AuthContext.Provider value={{
+            token,
             user,
             setUser,
             loading,

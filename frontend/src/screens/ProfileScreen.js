@@ -12,7 +12,7 @@ function ProfileScreen({ navigation }) {
     const [userAccountType, setUserAccountType] = useState('');
     const [toast, setToast] = useState({});
     const [toastKey, setToastKey] = useState(0);
-    const { user, actions } = useAuth();
+    const { user, token, actions } = useAuth();
     const userId = user.uid;
 
     /**
@@ -21,8 +21,17 @@ function ProfileScreen({ navigation }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Construct request
+                const options = {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                };
+
                 // Get user document
-                const response = await fetch(`${API_URL}/users/${userId}/`);
+                const response = await fetch(`${API_URL}/users/${userId}/`, options);
                 const json = await response.json();
 
                 // Deconstruct user document
