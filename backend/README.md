@@ -10,14 +10,7 @@ Before you can run or deploy the backend, you need to install some dependencies 
 
 - Node.js and npm: You can download and install them from [here](https://nodejs.org/).
 - Google Cloud SDK: You can download and install it from [here](https://cloud.google.com/sdk/docs/install).
-
-### Installing Dependencies
-
-- Once you have Node.js and npm installed, navigate to the `backend` directory in your terminal and run the following command to install the project dependencies:
-
-    ```
-    npm install
-    ```
+- Docker: You can download Docker from [here](https://www.docker.com/products/docker-desktop). Follow the instructions for your specific operating system.
 
 ### Install the Google Cloud SDK
 
@@ -70,10 +63,14 @@ gcloud auth application-default login
 
 ### Running the Application Locally
 
-To start the application locally, run the following command in the `backend` directory:
+To start the application locally, run the following commands in the `backend` directory:
 
 ```
-npm start
+docker build -t express-service .
+```
+
+```
+docker run -p 8000:8000 -d express-service
 ```
 
 ### Testing Local Changes
@@ -81,17 +78,19 @@ npm start
 To test local changes, you need to change the API_URL in the constants.js file in the frontend directory to point to your local server. i.e.
 
 ```
-export const API_URL = 'http://10.0.2.2:3000';
+export const API_URL = 'http://10.0.2.2:8000';
 ```
 
 ### Deploying the Application
 
-To deploy the application to Google Cloud, run the following command in the backend directory:
+To deploy the application to Google Cloud, run the following commands in the backend directory:
 
 ```
-gcloud app deploy
+gcloud builds submit --tag gcr.io/watersafai/express-service
 ```
 
+```
+gcloud run deploy --image gcr.io/watersafai/express-service --platform managed
+```
 
 This will deploy your application and give you a URL where you can access it.
-
