@@ -14,10 +14,6 @@ const AddTestResultsScreen = () => {
     const { user, token } = useAuth();
     const userId = user.uid;
 
-    useEffect(() => {
-        console.log('user token...', token);
-    }  , [token])
-
     /**
      * Send a POST request to the backend server with the test results
      */
