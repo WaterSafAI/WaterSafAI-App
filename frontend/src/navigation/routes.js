@@ -7,7 +7,7 @@ import HomeStack from "./homeStack";
 import AuthStack from "./authStack";
 
 const Routes = () => {
-    const {user, setUser} = useAuth();
+    const {user, token, setUser} = useAuth();
     const [initialized, setInitialized] = useState(false);
 
     // sets initial user if already logged in
@@ -35,7 +35,7 @@ const Routes = () => {
 
     return (
         <NavigationContainer onReady={onLayoutRootView}>
-            {user ? <HomeStack/> : <AuthStack/>}
+            {user && token ? <HomeStack/> : <AuthStack/>}
         </NavigationContainer>
     );
 };

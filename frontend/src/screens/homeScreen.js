@@ -18,7 +18,6 @@ function HomeScreen(props) {
      */
     useEffect(() => {
         const fetchData = async () => {
-            console.log('Fetching user data...', token);
             try {
                 // Construct request
                 const options = {
@@ -51,6 +50,30 @@ function HomeScreen(props) {
 
         fetchData();
     }, [user])
+
+    // const [location, setLocation] = useState({})
+
+    useEffect(() => {
+        
+        (async() => {
+
+            let {status} = await  Location.requestForegroundPermissionsAsync()
+
+            if(status == 'granted'){
+                console.log('Permission granted')
+            }
+            else{
+                console.log('Permission denied')
+            }
+
+            const loc = await Location.getCurrentPositionAsync()
+            console.log(loc)
+
+            setLocation(loc)
+        })()
+
+    }, [])
+
 
     // Helper function to display the user address
     const userAddressDisplay = () => {
