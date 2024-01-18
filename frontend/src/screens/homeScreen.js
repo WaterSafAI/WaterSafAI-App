@@ -19,7 +19,6 @@ function HomeScreen(props) {
      */
     useEffect(() => {
         const fetchData = async () => {
-            console.log('Fetching user data...', token);
             try {
                 // Construct request
                 const options = {
@@ -53,7 +52,7 @@ function HomeScreen(props) {
         fetchData();
     }, [user])
 
-    const [location, setLocation] = useState({})
+    // const [location, setLocation] = useState({})
 
     useEffect(() => {
         

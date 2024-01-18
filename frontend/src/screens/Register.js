@@ -13,11 +13,11 @@ function Register({ navigation }) {
     const [password, setPassword] = useState("")
     const [plan, setPlan] = useState("personal")
 
-   const handleRegister = () => {
+   const handleRegister = async () => {
         // TODO set up user access roles
         // TODO Validate userInfo to conform with secure password standards
 
-        actions.register(name, email, password, plan);
+        await actions.register(name, email, password, plan);
     }
 
     if (loading) {
