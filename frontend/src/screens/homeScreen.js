@@ -7,7 +7,6 @@ import { API_URL } from '../../constants';
 
 function HomeScreen(props) {
     const [userName, setUserName] = useState();
-    const [userAddress, setUserAddress] = useState({});
     const [userAccountType, setUserAccountType] = useState('');
     const [location, setLocation] = useState(null)
     const { navigation } = props;
@@ -52,27 +51,47 @@ function HomeScreen(props) {
         fetchData();
     }, [user])
 
-    // const [location, setLocation] = useState({})
-
+    /**
+    * This effect will request access to fetch the user's location.
+    */
     useEffect(() => {
-        
         (async() => {
+            console.log('Fetching user location...');
 
-            let {status} = await  Location.requestForegroundPermissionsAsync()
+            try{
+                let {status} = await  Location.requestForegroundPermissionsAsync()
 
-            if(status == 'granted'){
-                console.log('Permission granted')
+                if(status == 'granted'){
+                    console.log('Permission granted')
+
+                    const loc = await Location.getCurrentPositionAsync()
+                    console.log(loc)
+                    setLocation(loc)        
+                
+                    const options = {
+                        method: "PATCH",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'latitude': loc.coords.latitude,
+                            'longitude': loc.coords.longitude
+                        },
+                    };
+
+                    //Update user location in database
+                    const response = await fetch(`${API_URL}/users/${userId}/`, options);
+
+                    if (!response.ok) {
+                        throw new Error(`Response code: ${response.status}`);
+                    }
+                }
+                else{
+                    console.log('Permission denied')
+                }
             }
-            else{
-                console.log('Permission denied')
+            catch(error){
+                console.error(`Error fetching user location: ${error}`)
             }
-
-            const loc = await Location.getCurrentPositionAsync()
-            console.log(loc)
-
-            setLocation(loc)
         })()
-
     }, [])
 
 
