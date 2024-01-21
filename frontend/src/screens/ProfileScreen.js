@@ -142,6 +142,13 @@ const styles = StyleSheet.create({
     container: {
         ...Screens.mainScreen
     },
+    userName:{
+        fontSize: 35,
+        marginTop: 20,
+        marginBottom: 15,
+        color: "#0A3465",
+        fontWeight: 'bold',
+    },
     inputView: {
         ...Inputs.fieldContainer,
         flexDirection: 'row',

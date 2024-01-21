@@ -72,8 +72,8 @@ function HomeScreen(props) {
                         method: "PATCH",
                         headers: {
                             'Content-Type': 'application/json',
-                            'latitude': loc.coords.latitude,
-                            'longitude': loc.coords.longitude
+                            'latitude': loc.coords.latitude, //May need to change based on what is in DB
+                            'longitude': loc.coords.longitude //May need to change based on what is in DB
                         },
                     };
 
@@ -121,7 +121,10 @@ function HomeScreen(props) {
         <View style={styles.container}>
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
             {/* <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text> */}
-            <Text>{JSON.stringify(location)}</Text>
+            <Text style={{marginBottom: 30, marginTop: 15}}>
+                <Text style={styles.locationHeader}>Location: </Text>
+                <Text style={styles.location}>{JSON.stringify(location)}</Text>
+            </Text>
 
             {userAccountType === 'professional' ?
                 <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
@@ -154,6 +157,13 @@ const styles = StyleSheet.create({
         margin: 20,
         color: '#0A3465',
     },
+    locationHeader: {
+        fontSize: 18,
+        margin: 20,
+        color: '#0A3465',
+        fontWeight: 'bold',
+    },
+
     locationHeader: {
         fontSize: 18,
         margin: 20,
