@@ -9,6 +9,7 @@ function HomeScreen(props) {
     const [userName, setUserName] = useState();
     const [userAccountType, setUserAccountType] = useState('');
     const [location, setLocation] = useState(null)
+    const [address, setAddress] = useState(null) // [street, city, state, zip]
     const { navigation } = props;
     const { user, token } = useAuth();
     const userId = user.uid;
@@ -56,25 +57,51 @@ function HomeScreen(props) {
     */
     useEffect(() => {
         (async() => {
-            console.log('Fetching user location...');
-
+            if (location && Object.keys(location).length !== 0) {
+                console.log('Location already fetched');
+                const reverseGeocode = await Location.reverseGeocodeAsync(location.coords);
+                setAddress(reverseGeocode[0]);
+                return;
+            }
             try{
-                let {status} = await  Location.requestForegroundPermissionsAsync()
+                console.log('Fetching user location...');
+                const res = await Location.requestForegroundPermissionsAsync()
+                let {status} = res;
+
+                // Map the string accuracy to a numeric accuracy
+                let accuracy;
+                switch (res.android.accuracy) {
+                    case 'fine':
+                        accuracy = Location.Accuracy.High;
+                        break;
+                    case 'coarse':
+                        accuracy = Location.Accuracy.Low;
+                        break;
+                    default:
+                        accuracy = Location.Accuracy.Balanced;
+                        break;
+                }
 
                 if(status == 'granted'){
                     console.log('Permission granted')
-
-                    const loc = await Location.getCurrentPositionAsync()
-                    console.log(loc)
+                    // Get user location
+                    const loc = await Location.getCurrentPositionAsync({ accuracy })
                     setLocation(loc)        
-                
+
+                    // Get user address
+                    const reverseGeocode = await Location.reverseGeocodeAsync(loc.coords);
+                    setAddress(reverseGeocode[0]);
+
                     const options = {
                         method: "PATCH",
                         headers: {
                             'Content-Type': 'application/json',
-                            'latitude': loc.coords.latitude, //May need to change based on what is in DB
-                            'longitude': loc.coords.longitude //May need to change based on what is in DB
+                            'Authorization': `Bearer ${token}`
                         },
+                        body: JSON.stringify({
+                            latitude: loc.coords.latitude, 
+                            longitude: loc.coords.longitude
+                        })
                     };
 
                     //Update user location in database
@@ -97,9 +124,7 @@ function HomeScreen(props) {
 
     // Helper function to display the user address
     const userAddressDisplay = () => {
-        
-        // return `${userAddress.street} ${userAddress.city}, ${userAddress.state} ${userAddress.zip}`
-        return <Text>{JSON.stringify(location)}</Text>
+        return address ? `${address.street} ${address.city}, ${address.region}, ${address.postalCode}` : 'Location not found';
     }
 
     const handleAddTestResults = () => {
@@ -120,10 +145,9 @@ function HomeScreen(props) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
-            {/* <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text> */}
             <Text style={{marginBottom: 30, marginTop: 15}}>
                 <Text style={styles.locationHeader}>Location: </Text>
-                <Text style={styles.location}>{JSON.stringify(location)}</Text>
+                <Text style={styles.location}>{userAddressDisplay()}</Text>
             </Text>
 
             {userAccountType === 'professional' ?
