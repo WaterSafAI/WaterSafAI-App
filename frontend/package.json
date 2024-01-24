@@ -19,7 +19,7 @@
     "@react-navigation/native-stack": "^6.9.15",
     "expo": "~49.0.13",
     "expo-dev-client": "~2.4.12",
-    "expo-location": "~16.1.0",
+    "expo-location": "^16.5.2",
     "expo-secure-store": "~12.3.1",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
