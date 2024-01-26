@@ -145,7 +145,7 @@ function HomeScreen(props) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
-            <Text style={{marginBottom: 30, marginTop: 15}}>
+            <Text style={styles.locationContainer}>
                 <Text style={styles.locationHeader}>Location: </Text>
                 <Text style={styles.location}>{userAddressDisplay()}</Text>
             </Text>
@@ -176,18 +176,19 @@ const styles = StyleSheet.create({
         margin: 20,
         color: '#0A3465',
     },
+    locationContainer: {
+        marginBottom: 30, 
+        marginTop: 15, 
+        marginLeft: 15, 
+        marginRight: 10, 
+        textAlign: 'center',
+    },
     location: {
         fontSize: 18,
         margin: 20,
         color: '#0A3465',
+        textAlign: 'center',
     },
-    locationHeader: {
-        fontSize: 18,
-        margin: 20,
-        color: '#0A3465',
-        fontWeight: 'bold',
-    },
-
     locationHeader: {
         fontSize: 18,
         margin: 20,
