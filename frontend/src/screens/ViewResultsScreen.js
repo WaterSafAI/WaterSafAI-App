@@ -28,13 +28,20 @@ const ViewResultsScreen = () => {
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.header}>Water Quality Results</Text>
-            <Text style={styles.subHeader}>Tested by: {results.companyName}</Text>
-            <Text style={styles.subHeader}>Test Date: {results.testDate}</Text>
+            <Text style={{textAlign: 'center', marginBottom: 10}}>
+                <Text style={styles.subHeader}>Tested By: </Text>
+                <Text style={styles.subHeaderRes}>{results.companyName}</Text>
+            </Text>
+            <Text style={{textAlign: 'center', marginBottom: 15}}>
+                <Text style={styles.subHeader}>Test Date: </Text>
+                <Text style={styles.subHeaderRes}>{results.testDate}</Text>
+            </Text>
 
             {/* Header Row */}
             <View style={styles.resultRow}>
                 <Text style={[styles.analysis, styles.headerText]}>Analysis</Text>
                 <Text style={[styles.result, styles.headerText]}>Results</Text>
+                <Text>{"        "}</Text>
                 <Text style={[styles.units, styles.headerText]}>Units</Text>
             </View>
 
@@ -44,6 +51,7 @@ const ViewResultsScreen = () => {
                     <View key={index} style={styles.resultRow}>
                         <Text style={styles.analysis}>{item.analysis}</Text>
                         <Text style={styles.result}>{item.result}</Text>
+                        <Text>{"        "}</Text>
                         <Text style={styles.units}>{item.units}</Text>
                     </View>
                 ))}
@@ -79,6 +87,13 @@ const styles = StyleSheet.create({
         color: '#0A3465'
     },
     subHeader: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginVertical: 5,
+        color: '#0A3465',
+        fontWeight: 'bold',
+    },
+    subHeaderRes: {
         fontSize: 18,
         textAlign: 'center',
         marginVertical: 5,
@@ -126,7 +141,8 @@ const styles = StyleSheet.create({
     },
     solutionBtn: {
         marginTop: 24,
-        ...Buttons.buttonContainer
+        ...Buttons.buttonContainer,
+        alignItems: 'center' + '!important'
     },
     btnText: {
         ...Buttons.buttonText

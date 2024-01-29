@@ -13,22 +13,22 @@ function ProfileScreen({ navigation }) {
             <Text style={styles.userName}>Josh Simmons</Text>
 
             <View style={styles.inputView}>
-                <FontAwesome name="envelope" size={20} color="blue" />
+                <FontAwesome name="envelope" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Email: example1@gmail.com.com</Text>
             </View>
 
             <View style={styles.inputView}>
-                <FontAwesome name="briefcase" size={20} color="blue" />
+                <FontAwesome name="briefcase" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Account Type: Professional</Text>
             </View>
 
             <View style={styles.inputView}>
-                <FontAwesome name="map-marker" size={20} color="blue" />
+                <FontAwesome name="map-marker" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Location: 1234 Research Parkway, Orlando FL 32826</Text>
             </View>
 
             <View style={styles.inputView}>
-                <FontAwesome name="building" size={20} color="blue" />
+                <FontAwesome name="building" size={20} color="#0A3465" />
                 <Text style={styles.inputText}>Company: Siemens Energy</Text>
             </View>
 
@@ -49,6 +49,13 @@ function ProfileScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         ...Screens.mainScreen
+    },
+    userName:{
+        fontSize: 35,
+        marginTop: 20,
+        marginBottom: 15,
+        color: "#0A3465",
+        fontWeight: 'bold',
     },
     inputView: {
         ...Inputs.fieldContainer,

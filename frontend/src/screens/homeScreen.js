@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 import { Color, Screens, Buttons } from '../styles/index';
 import { useAuth } from '../services/AuthProvider';
+import * as Location from 'expo-location';
 import { API_URL } from '../../constants';
 
 function HomeScreen(props) {
     const [userName, setUserName] = useState();
-    const [userAddress, setUserAddress] = useState({});
     const [userAccountType, setUserAccountType] = useState('');
     const [location, setLocation] = useState(null)
+    const [address, setAddress] = useState(null) // [street, city, state, zip]
     const { navigation } = props;
     const { user, token } = useAuth();
     const userId = user.uid;
@@ -51,33 +52,79 @@ function HomeScreen(props) {
         fetchData();
     }, [user])
 
-    // const [location, setLocation] = useState({})
-
+    /**
+    * This effect will request access to fetch the user's location.
+    */
     useEffect(() => {
-        
         (async() => {
-
-            let {status} = await  Location.requestForegroundPermissionsAsync()
-
-            if(status == 'granted'){
-                console.log('Permission granted')
+            if (location && Object.keys(location).length !== 0) {
+                console.log('Location already fetched');
+                const reverseGeocode = await Location.reverseGeocodeAsync(location.coords);
+                setAddress(reverseGeocode[0]);
+                return;
             }
-            else{
-                console.log('Permission denied')
+            try{
+                console.log('Fetching user location...');
+                const res = await Location.requestForegroundPermissionsAsync()
+                let {status} = res;
+
+                // Map the string accuracy to a numeric accuracy
+                let accuracy;
+                switch (res.android.accuracy) {
+                    case 'fine':
+                        accuracy = Location.Accuracy.High;
+                        break;
+                    case 'coarse':
+                        accuracy = Location.Accuracy.Low;
+                        break;
+                    default:
+                        accuracy = Location.Accuracy.Balanced;
+                        break;
+                }
+
+                if(status == 'granted'){
+                    console.log('Permission granted')
+                    // Get user location
+                    const loc = await Location.getCurrentPositionAsync({ accuracy })
+                    setLocation(loc)        
+
+                    // Get user address
+                    const reverseGeocode = await Location.reverseGeocodeAsync(loc.coords);
+                    setAddress(reverseGeocode[0]);
+
+                    const options = {
+                        method: "PATCH",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            latitude: loc.coords.latitude, 
+                            longitude: loc.coords.longitude
+                        })
+                    };
+
+                    //Update user location in database
+                    const response = await fetch(`${API_URL}/users/${userId}/`, options);
+
+                    if (!response.ok) {
+                        throw new Error(`Response code: ${response.status}`);
+                    }
+                }
+                else{
+                    console.log('Permission denied')
+                }
             }
-
-            const loc = await Location.getCurrentPositionAsync()
-            console.log(loc)
-
-            setLocation(loc)
+            catch(error){
+                console.error(`Error fetching user location: ${error}`)
+            }
         })()
-
     }, [])
 
 
     // Helper function to display the user address
     const userAddressDisplay = () => {
-        return `${userAddress.street} ${userAddress.city}, ${userAddress.state} ${userAddress.zip}`
+        return address ? `${address.street} ${address.city}, ${address.region}, ${address.postalCode}` : 'Location not found';
     }
 
     const handleAddTestResults = () => {
@@ -98,7 +145,10 @@ function HomeScreen(props) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{`Welcome ${userName}!`}</Text>
-            <Text style={styles.location}>{`Location: ${userAddressDisplay()}`}</Text>
+            <Text style={styles.locationContainer}>
+                <Text style={styles.locationHeader}>Location: </Text>
+                <Text style={styles.location}>{userAddressDisplay()}</Text>
+            </Text>
 
             {userAccountType === 'professional' ?
                 <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
@@ -126,10 +176,18 @@ const styles = StyleSheet.create({
         margin: 20,
         color: '#0A3465',
     },
+    locationContainer: {
+        marginBottom: 30, 
+        marginTop: 15, 
+        marginLeft: 15, 
+        marginRight: 10, 
+        textAlign: 'center',
+    },
     location: {
         fontSize: 18,
         margin: 20,
         color: '#0A3465',
+        textAlign: 'center',
     },
     locationHeader: {
         fontSize: 18,
