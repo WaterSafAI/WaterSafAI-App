@@ -32,42 +32,46 @@ const ViewResultsScreen = () => {
                 <Text style={styles.subHeader}>Tested By: </Text>
                 <Text style={styles.subHeaderRes}>{results.companyName}</Text>
             </Text>
-            <Text style={{textAlign: 'center', marginBottom: 15}}>
+            <Text style={{textAlign: 'center', marginBottom: 25}}>
                 <Text style={styles.subHeader}>Test Date: </Text>
                 <Text style={styles.subHeaderRes}>{results.testDate}</Text>
             </Text>
 
-            {/* Header Row */}
-            <View style={styles.resultRow}>
-                <Text style={[styles.analysis, styles.headerText]}>Analysis</Text>
-                <Text style={[styles.result, styles.headerText]}>Results</Text>
-                <Text>{"        "}</Text>
-                <Text style={[styles.units, styles.headerText]}>Units</Text>
-            </View>
+            <View style={styles.resultBox}>
+                {/* Header Row */}
+                <View style={styles.resultRow}>
+                    <Text style={[styles.analysis, styles.headerText, styles.analysisHeader]}>Analysis</Text>
+                    <Text style={[styles.result, styles.headerText]}>Results</Text>
+                    <Text>{"        "}</Text>
+                    <Text style={[styles.units, styles.headerText]}>Units</Text>
+                </View>
 
-            {/* Results Rows */}
-            <View style={styles.resultsContainer}>
-                {results.data.map((item, index) => (
-                    <View key={index} style={styles.resultRow}>
-                        <Text style={styles.analysis}>{item.analysis}</Text>
-                        <Text style={styles.result}>{item.result}</Text>
-                        <Text>{"        "}</Text>
-                        <Text style={styles.units}>{item.units}</Text>
-                    </View>
-                ))}
+                {/* Results Rows */}
+                <View style={styles.resultsContainer}>
+                    {results.data.map((item, index) => (
+                        <View key={index} style={styles.resultRow}>
+                            <Text style={styles.analysis}>{item.analysis}</Text>
+                            <Text style={styles.result}>{item.result}</Text>
+                            <Text>{"        "}</Text>
+                            <Text style={styles.units}>{item.units}</Text>
+                        </View>
+                    ))}
+                </View>
             </View>
-
-            {/* Solutions Button */}
-            <Pressable
-                onPress={handleViewSolutions}
-                style={({ pressed }) => [
-                    {
-                        backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
-                    },
-                    styles.solutionBtn,
-                ]}>
-                <Text style={styles.btnText}>Solutions</Text>
-            </Pressable>
+            
+            <View style={{alignItems: 'center'}}>
+                {/* Solutions Button */}
+                <Pressable
+                    onPress={handleViewSolutions}
+                    style={({ pressed }) => [
+                        {
+                            backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+                        },
+                        styles.solutionBtn,
+                    ]}>
+                    <Text style={styles.btnText}>Solutions</Text>
+                </Pressable>
+            </View>
         </ScrollView>
     );
 };
@@ -103,6 +107,10 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         paddingHorizontal: 10,
     },
+    resultBox: {
+        backgroundColor: '#F5F5F5',
+        borderRadius: 5,
+    },
     resultRowHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -113,6 +121,7 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontWeight: 'bold',
+        fontSize: 18,
     },
     resultRow: {
         flexDirection: 'row',
@@ -122,27 +131,32 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
     },
     analysis: {
-        width: '50%', // Adjusted to take half the row width
+        width: '45%', // Adjusted to take half the row width
         fontSize: 16,
-        fontWeight: 'bold',
         color: '#644535',
+        paddingLeft: 5,
+    },
+    analysisHeader: {       
+        paddingLeft: 15,
     },
     result: {
         width: '25%', // Adjusted to take a quarter of the row width
         fontSize: 16,
         textAlign: 'right',
         color: '#644535',
+        fontWeight: 'bold',
     },
     units: {
         width: '25%', // Adjusted to take a quarter of the row width
         fontSize: 16,
         textAlign: 'left',
         color: '#644535',
+        fontWeight: 'bold',
+        paddingRight: 15,
     },
     solutionBtn: {
         marginTop: 24,
-        ...Buttons.buttonContainer,
-        alignItems: 'center' + '!important'
+        ...Buttons.buttonContainer,            
     },
     btnText: {
         ...Buttons.buttonText
