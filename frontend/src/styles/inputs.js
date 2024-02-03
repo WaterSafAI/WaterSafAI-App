@@ -9,7 +9,7 @@ export const fieldContainer = {
     padding: 10,
     margin:10,
     borderWidth: 3,
-    borderColor: inputs.outline
+    borderColor: inputs.outline,
 }
 
 export const loginInput = {

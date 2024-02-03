@@ -39,7 +39,7 @@ const AuthProvider = ({children}) => {
             try {
                 const userCredential = await auth().createUserWithEmailAndPassword(email, password);
                 const currentUser = userCredential.user;
-
+                
                 // Create a new user document in Firestore
                 await firestore().collection('users').doc(currentUser.uid).set({
                     displayName: name,
@@ -47,6 +47,13 @@ const AuthProvider = ({children}) => {
                     isNewUser: true,
                     plan: plan
                 });
+
+                // Get the user's ID token
+                const token = await currentUser.getIdToken(true);
+                if (!token) {
+                    throw new Error('Unable to get token');
+                }
+                setToken(token);
 
                 console.log('User account created!');
             } catch (error) {
@@ -58,6 +65,7 @@ const AuthProvider = ({children}) => {
         logout: async () => {
             try {
                 await auth().signOut();
+                setToken(null);
                 console.log('User signed out!');
                 // If needed, perform additional actions after successful logout,
                 // like updating the user state.

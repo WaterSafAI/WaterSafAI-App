@@ -10,8 +10,8 @@ function Login({ navigation }) {
 
     const { actions, loading } = useAuth();
 
-    const handleLogin = () => {
-        actions.login(email, password)
+    const handleLogin = async () => {
+        await actions.login(email, password)
     }
 
     const handleForgotPassword = () => {
