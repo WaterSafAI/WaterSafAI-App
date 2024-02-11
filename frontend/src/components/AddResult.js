@@ -1,6 +1,7 @@
 import React, { useEffect, useState }  from 'react';
 import {View, StyleSheet, Pressable, Text, TextInput} from "react-native";
 import {Picker} from '@react-native-picker/picker'
+import {Color} from '../styles/index';
 
 const AddResult = () => {
 
@@ -8,18 +9,25 @@ const AddResult = () => {
 
     return (
         <View style={styles.addResultComponent}>
-        <Pressable style={styles.addResBtn}>
+        <Pressable 
+        style={({ pressed }) => [
+            {
+                backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+            },
+            styles.addResBtn,
+        ]}>
             {/* onPress={}  */}
             {/* style = {(pressed) => [
                 //if pressed, change + icon to - icon
             ]}  */}
+            
             <Text style={styles.resInputBtn}>+</Text>
         </Pressable>
 
         <View>
             <Picker style={styles.picker}
                 selectedValue={pickerValue}
-                arrowIconStyle={{tintColor: '#D8EBF1'}}
+                dropdownIconColor={'#D8EBF1'}
                 onValueChange={(itemValue) => setPickerValue(itemValue)}>
                 <Picker.Item label="pH" value="pH"/>
                 <Picker.Item label="Chlorine" value="Chlorine"/>
