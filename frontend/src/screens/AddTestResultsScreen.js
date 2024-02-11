@@ -120,13 +120,6 @@ const styles = StyleSheet.create({
     btnText: {
         ...Buttons.buttonText
     },
-    addResultComponent: {
-        width: '80%',
-        height: 64,
-        backgroundColor: '#66B3CC',
-        borderRadius: 5,
-        flexDirection: 'row',
-    },
     header: {
         flexDirection: 'row',
         textAlign: 'left',
@@ -147,39 +140,6 @@ const styles = StyleSheet.create({
         marginLeft: 110,
         fontSize: 18,
     },
-    resultInput: {
-        backgroundColor: '#D8EBF1',
-        borderColor: '#644535',
-        borderWidth: 2,
-        width: 82,
-        height: 51,
-        alignSelf: 'flex-end',
-        marginLeft: 20,
-        marginBottom: 7
-    },
-    addResBtn: {
-        width: 21,
-        height: 21,
-        backgroundColor: '#D8EBF1',
-        marginTop: 20,
-        marginLeft: 15,
-        borderRadius: 5,
-    },
-    resInputBtn: {
-        textAlign: 'center',
-        color: '#644535',
-        fontWeight: 'bold',
-    },
-    picker: {
-        width: 160,
-        minHeight: 52,
-        backgroundColor: '#644535',
-        borderRadius: 5,
-        borderWidth: 2,
-        color: '#D8EBF1',
-        marginLeft: 15,
-        marginTop: 5,
-    }
 });
 
 export default AddTestResultsScreen;
