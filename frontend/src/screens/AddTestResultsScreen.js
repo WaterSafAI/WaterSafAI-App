@@ -4,6 +4,7 @@ import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { useAuth } from "../services/AuthProvider";
 import Toast from "../components/Toast"
 import { API_URL } from '../../constants';
+import AddResult from '../components/AddResult';
 
 const AddTestResultsScreen = () => {
     const [field1, setField1] = useState('');
@@ -11,6 +12,7 @@ const AddTestResultsScreen = () => {
     const [field3, setField3] = useState('');
     const [toast, setToast] = useState({});
     const [toastKey, setToastKey] = useState(0);
+    const [pickerValue, setPickerValue] = useState('');
     const { user, token } = useAuth();
     const userId = user.uid;
 
@@ -71,36 +73,16 @@ const AddTestResultsScreen = () => {
             <Text style={{ color: Color.logo, fontSize: 32, fontWeight: 'bold', marginTop: 50, marginBottom: 30 }}>
                 Add Test Results
             </Text>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    fontSize={18}
-                    placeholder='Test Result 1'
-                    placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setField1(text)}
-                    value={field1}
-                />
+
+            <View style={styles.header}>
+                <Text style={styles.headerTextType}>Type</Text>
+                <Text style={styles.headerTextValue}>Value</Text>
             </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    fontSize={18}
-                    placeholder='Test Result 2'
-                    placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setField2(text)}
-                    value={field2}
-                />
-            </View>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    fontSize={18}
-                    placeholder='Test Result 3'
-                    placeholderTextColor={Color.inputs.text}
-                    onChangeText={text => setField3(text)}
-                    value={field3}
-                />
-            </View>
+            <AddResult></AddResult>
+            <AddResult></AddResult>
+            <AddResult></AddResult>
+            <AddResult></AddResult>
+
             <Pressable
                 onPress={handleAddResults}
                 style={({ pressed }) => [
@@ -133,11 +115,71 @@ const styles = StyleSheet.create({
     },
     addBtn: {
         ...Buttons.buttonContainer,
-        marginTop: 32
+        marginTop: 32,
     },
     btnText: {
         ...Buttons.buttonText
     },
+    addResultComponent: {
+        width: '80%',
+        height: 64,
+        backgroundColor: '#66B3CC',
+        borderRadius: 5,
+        flexDirection: 'row',
+    },
+    header: {
+        flexDirection: 'row',
+        textAlign: 'left',
+        marginBottom: 5,
+        marginTop: 10,
+        width: '60%'
+    },
+    headerTextType: {
+        color: '#644535',
+        fontWeight: 'bold',
+        marginLeft: 10,
+        marginRight: 30, 
+        fontSize: 18,
+    },
+    headerTextValue:{
+        color: '#644535',
+        fontWeight: 'bold',
+        marginLeft: 110,
+        fontSize: 18,
+    },
+    resultInput: {
+        backgroundColor: '#D8EBF1',
+        borderColor: '#644535',
+        borderWidth: 2,
+        width: 82,
+        height: 51,
+        alignSelf: 'flex-end',
+        marginLeft: 20,
+        marginBottom: 7
+    },
+    addResBtn: {
+        width: 21,
+        height: 21,
+        backgroundColor: '#D8EBF1',
+        marginTop: 20,
+        marginLeft: 15,
+        borderRadius: 5,
+    },
+    resInputBtn: {
+        textAlign: 'center',
+        color: '#644535',
+        fontWeight: 'bold',
+    },
+    picker: {
+        width: 160,
+        minHeight: 52,
+        backgroundColor: '#644535',
+        borderRadius: 5,
+        borderWidth: 2,
+        color: '#D8EBF1',
+        marginLeft: 15,
+        marginTop: 5,
+    }
 });
 
 export default AddTestResultsScreen;
