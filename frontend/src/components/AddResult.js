@@ -9,13 +9,19 @@ const AddResult = () => {
     const [buttonText, setButtonText] = useState('+');
 
     const addComponent = () => {
-        setButtonText('-');
 
-        if(buttonText == '+'){
-            //add another component
+        try{
+            if(buttonText == '+'){
+
+                setButtonText('-');
+                //add another component
+            }
+            else{
+                //delete current component
+            }    
         }
-        else{
-            //delete current component
+        catch(error){
+            console.error(`Error adding/deleting addResult component: ${error}`);
         }
     }
 
