@@ -1,40 +1,55 @@
 import React, { useEffect, useState }  from 'react';
-import {View, StyleSheet, Pressable, Text, TextInput} from "react-native";
+import {View, StyleSheet, Pressable, Text, TextInput, ScrollView} from "react-native";
 import {Picker} from '@react-native-picker/picker'
 import {Color} from '../styles/index';
 
 const AddResult = () => {
 
     const [pickerValue, setPickerValue] = useState('');
+    const [buttonText, setButtonText] = useState('+');
+
+    const addComponent = () => {
+        setButtonText('-');
+
+        if(buttonText == '+'){
+            //add another component
+        }
+        else{
+            //delete current component
+        }
+    }
 
     return (
         <View style={styles.addResultComponent}>
-        <Pressable 
-        style={({ pressed }) => [
-            {
-                backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
-            },
-            styles.addResBtn,
-        ]}>
-            {/* onPress={}  */}
-            {/* style = {(pressed) => [
-                //if pressed, change + icon to - icon
-            ]}  */}
-            
-            <Text style={styles.resInputBtn}>+</Text>
-        </Pressable>
+            <Pressable 
+            style={({ pressed }) => [
+                {
+                    backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+                },
+                styles.addResBtn,
+            ]}
+            onPress={addComponent}>
+                <Text style={styles.resInputBtn}>{buttonText}</Text>
+            </Pressable>
 
-        <View>
-            <Picker style={styles.picker}
-                selectedValue={pickerValue}
-                dropdownIconColor={'#D8EBF1'}
-                onValueChange={(itemValue) => setPickerValue(itemValue)}>
-                <Picker.Item label="pH" value="pH"/>
-                <Picker.Item label="Chlorine" value="Chlorine"/>
-            </Picker>
+            <View>
+                <Picker style={styles.picker}
+                    selectedValue={pickerValue}
+                    dropdownIconColor={'#D8EBF1'}
+                    onValueChange={(itemValue) => setPickerValue(itemValue)}>
+                    <Picker.Item label="-----" value=""/>
+                    <Picker.Item label="Total Coliform Bacteria" value="Total Coliform Bacteria"/>
+                    <Picker.Item label="Nitrate-Nitrogen" value="Nitrate-Nitrogen"/>
+                    <Picker.Item label="pH" value="pH"/>
+                    <Picker.Item label="Iron" value="Iron"/>
+                    <Picker.Item label="Hardness as CaCo3" value="Hardness as CaCo3"/>
+                    <Picker.Item label="Sulfate Sulfur" value="Sulfate Sulfur"/>
+                    <Picker.Item label="Chlorine" value="Chlorine"/>
+                    <Picker.Item label="Specific Conductance" value="Specific Conductance"/>
+                </Picker>
+            </View>
+            <TextInput style={styles.resultInput}></TextInput>
         </View>
-        <TextInput style={styles.resultInput}></TextInput>
-    </View>
     );
 };
 
