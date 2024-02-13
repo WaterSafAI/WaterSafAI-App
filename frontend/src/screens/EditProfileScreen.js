@@ -1,49 +1,118 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { FontAwesome } from '@expo/vector-icons';
+import Toast from '../components/Toast';
+import { useAuth } from "../services/AuthProvider";
+import { API_URL } from '../../constants';
 
-function ProfileScreen({ navigation }) {
-    const handleSave = () => {
-        // Handle save
+function EditProfileScreen({ navigation }) {
+    const [userEmail, setUserEmail] = useState('');
+    const [userAccountType, setUserAccountType] = useState('');
+    const [userLocation, setUserLocation] = useState('');
+    const [companyName, setCompanyName] = useState('');
+    const [toastKey, setToastKey] = useState(0);
+    const [toast, setToast] = useState({});
+
+    const { user, token, actions } = useAuth();
+    const userId = user.uid;
+
+    const handleSave = async () => {
+        setToastKey(toastKey + 1);
+
+        // Validate input
+        if (!userEmail || !userAccountType || !companyName || !userLocation) {
+            setToast({type:"error", message: 'Please fill out all fields.'});
+            return;
+        }
+
+        // Construct request
+        const options = {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                email: userEmail,
+                plan: userAccountType,
+                companyName: companyName,
+                location: userLocation
+            })
+        };
+
+        // Update user document
+        const response = await fetch(`${API_URL}/users/${userId}/`, options);
+
+        // Handle response
+        if (!response.ok) {
+            setToast({type: "error", message: "Error updating profile."});
+        } else {
+            setToast({type: "success", message: "Profile Updated!"});
+        }
     }
 
     return (
         <View style={styles.container}>
+            {toast.message && <Toast key={toastKey} message={toast.message} type={toast.type}/>}
             <View style={styles.useNameBackground}>
-                <Text style={styles.userName}>Josh Simmons</Text>
+                <Text style={styles.userName}></Text>
             </View>
 
             <View style={styles.topInput}></View>
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="envelope" size={20} color="#0A3465" />
-                    <Text style={styles.inputTextHeader}>Email: </Text>
-                    <Text style={styles.inputText}>example1@gmail.com.com</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        fontSize={16}
+                        placeholder='graysoncrozier40@gmail.com'
+                        placeholderTextColor={Color.inputs.text}
+                        onChangeText={text => setUserEmail(text)}
+                        value={userEmail}
+                    />
                 </View>
             </View>
 
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="briefcase" size={20} color="#0A3465" />
-                    <Text style={styles.inputTextHeader}>Account Type: </Text>
-                    <Text style={styles.inputText}>Professional</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        fontSize={16}
+                        placeholder='professional'
+                        placeholderTextColor={Color.inputs.text}
+                        onChangeText={text => setUserAccountType(text)}
+                        value={userAccountType}
+                    />
                 </View>
             </View>
 
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="map-marker" size={20} color="#0A3465" />
-                    <Text style={styles.inputTextHeader}>Location: </Text>
-                    <Text style={styles.inputText}>1234 Research Parkway, Orlando FL 32826</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        fontSize={16}
+                        placeholder='123 Hey Lane'
+                        placeholderTextColor={Color.inputs.text}
+                        onChangeText={text => setUserLocation(text)}
+                        value={userLocation}
+                    />
                 </View>
             </View>
 
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="building" size={20} color="#0A3465" />
-                    <Text style={styles.inputTextHeader}>Company: </Text>
-                    <Text style={styles.inputText}>Siemens Energy</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        fontSize={16}
+                        placeholder='Money LLC'
+                        placeholderTextColor={Color.inputs.text}
+                        onChangeText={text => setCompanyName(text)}
+                        value={companyName}
+                    />
                 </View>
             </View>
 
@@ -99,7 +168,7 @@ const styles = StyleSheet.create({
     },
     inputText: {
         fontSize: 15,
-        padding: 2,
+        padding: 8,
         color: '#0A3465',
     },
     inputBox: {
@@ -117,4 +186,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProfileScreen;
+export default EditProfileScreen;
