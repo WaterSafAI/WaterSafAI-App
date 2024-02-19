@@ -7,7 +7,7 @@ const AddResult = () => {
 
     const [pickerValue, setPickerValue] = useState('');
     const [buttonText, setButtonText] = useState('+');
-
+    
     const addComponent = () => {
 
         try{
@@ -17,6 +17,7 @@ const AddResult = () => {
                 //add another component
             }
             else{
+                setButtonText('+');
                 //delete current component
             }    
         }
@@ -44,14 +45,14 @@ const AddResult = () => {
                     dropdownIconColor={'#D8EBF1'}
                     onValueChange={(itemValue) => setPickerValue(itemValue)}>
                     <Picker.Item label="-----" value=""/>
-                    <Picker.Item label="Total Coliform Bacteria" value="Total Coliform Bacteria"/>
-                    <Picker.Item label="Nitrate-Nitrogen" value="Nitrate-Nitrogen"/>
-                    <Picker.Item label="pH" value="pH"/>
-                    <Picker.Item label="Iron" value="Iron"/>
-                    <Picker.Item label="Hardness as CaCo3" value="Hardness as CaCo3"/>
-                    <Picker.Item label="Sulfate Sulfur" value="Sulfate Sulfur"/>
-                    <Picker.Item label="Chlorine" value="Chlorine"/>
-                    <Picker.Item label="Specific Conductance" value="Specific Conductance"/>
+                    <Picker.Item label="Total Coliform Bacteria (#/100ml)" value="Total Coliform Bacteria"/>
+                    <Picker.Item label="Nitrate-Nitrogen (mg/l)" value="Nitrate-Nitrogen"/>
+                    <Picker.Item label="pH (units)" value="pH"/>
+                    <Picker.Item label="Iron (mg/l)" value="Iron"/>
+                    <Picker.Item label="Hardness as CaCo3 (mg/l)" value="Hardness as CaCo3"/>
+                    <Picker.Item label="Sulfate Sulfur (mg/l)" value="Sulfate Sulfur"/>
+                    <Picker.Item label="Chlorine (mg/l)" value="Chlorine"/>
+                    <Picker.Item label="Specific Conductance (umhos/cc)" value="Specific Conductance"/>
                 </Picker>
             </View>
             <TextInput style={styles.resultInput}></TextInput>
