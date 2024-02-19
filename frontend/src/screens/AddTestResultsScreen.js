@@ -73,7 +73,15 @@ const AddTestResultsScreen = () => {
             <Text style={{ color: Color.logo, fontSize: 32, fontWeight: 'bold', marginTop: 50, marginBottom: 30 }}>
                 Add Test Results
             </Text>
-
+            
+            {/* Future: add validation restriction on date input */}
+            <View style={styles.dateContainer}>
+                <Text style={styles.dateText}>Test Date:</Text>
+                <TextInput style={styles.dateInput} 
+                    placeholder='mm/yyyy'
+                    placeholderTextColor='#644535'>
+                </TextInput>
+            </View>
             <View style={styles.header}>
                 <Text style={styles.headerTextType}>Type</Text>
                 <Text style={styles.headerTextValue}>Value</Text>
@@ -134,11 +142,36 @@ const styles = StyleSheet.create({
         marginRight: 30, 
         fontSize: 18,
     },
-    headerTextValue:{
+    headerTextValue: {
         color: '#644535',
         fontWeight: 'bold',
         marginLeft: 110,
         fontSize: 18,
+    },
+    dateInput: {
+        backgroundColor: '#D8EBF1',
+        borderColor: '#644535',
+        borderWidth: 2,
+        borderRadius: 2,
+        width: 150,
+        height: 40,
+        alignSelf: 'flex-end',
+        marginLeft: 20,
+        marginBottom: 7,
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#644535',
+    },
+    dateContainer: {
+        flexDirection: 'row',
+    },
+    dateText: {
+        fontSize: 18,
+        textAlign: 'center',
+        marginVertical: 5,
+        color: '#0A3465',
+        fontWeight: 'bold',
     },
 });
 
