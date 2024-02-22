@@ -1,62 +1,88 @@
-import React, { useEffect, useState }  from 'react';
-import {View, StyleSheet, Pressable, Text, TextInput, ScrollView} from "react-native";
+import React, { useEffect, useState, useRef}  from 'react';
+import {View, StyleSheet, Pressable, Text, TextInput, Dimensions, Animated} from "react-native";
 import {Picker} from '@react-native-picker/picker'
 import {Color} from '../styles/index';
 
-const AddResult = () => {
+const AddResult = ({ item, afterAnimationComplete, removeItem }) => {
 
     const [pickerValue, setPickerValue] = useState('');
-    const [buttonText, setButtonText] = useState('+');
+
+    const width = Dimensions.get('window').width;
+    const animatedValue = useRef(new Animated.Value(0)).current;
     
-    const addComponent = () => {
-
-        try{
-            if(buttonText == '+'){
-
-                setButtonText('-');
-                //add another component
+    useEffect(() => {
+        Animated.timing(
+        animatedValue,
+        {
+            toValue: 0.5,
+            duration: 500,
+            useNativeDriver: true
+        }
+        ).start(() => {
+            afterAnimationComplete();
+        });
+    }, []);
+      
+    const removeItemHandler = () => {
+        Animated.timing(
+            animatedValue,
+            {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true
             }
-            else{
-                setButtonText('+');
-                //delete current component
-            }    
-        }
-        catch(error){
-            console.error(`Error adding/deleting addResult component: ${error}`);
-        }
-    }
+        ).start(() => {
+            removeItem(item.id);
+        });
+    };
 
-    return (
-        <View style={styles.addResultComponent}>
-            <Pressable 
-            style={({ pressed }) => [
-                {
-                    backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
-                },
-                styles.addResBtn,
-            ]}
-            onPress={addComponent}>
-                <Text style={styles.resInputBtn}>{buttonText}</Text>
-            </Pressable>
+    const translateAnimation = animatedValue.interpolate({
+        inputRange: [0, 0.5, 1],
+        outputRange: [-width, 0, width]
+    });
+    
+      const opacityAnimation = animatedValue.interpolate({
+        inputRange: [0, 0.5, 1],
+        outputRange: [0, 1, 0]
+    });
 
-            <View>
-                <Picker style={styles.picker}
-                    selectedValue={pickerValue}
-                    dropdownIconColor={'#D8EBF1'}
-                    onValueChange={(itemValue) => setPickerValue(itemValue)}>
-                    <Picker.Item label="-----" value=""/>
-                    <Picker.Item label="Total Coliform Bacteria (#/100ml)" value="Total Coliform Bacteria"/>
-                    <Picker.Item label="Nitrate-Nitrogen (mg/l)" value="Nitrate-Nitrogen"/>
-                    <Picker.Item label="pH (units)" value="pH"/>
-                    <Picker.Item label="Iron (mg/l)" value="Iron"/>
-                    <Picker.Item label="Hardness as CaCo3 (mg/l)" value="Hardness as CaCo3"/>
-                    <Picker.Item label="Sulfate Sulfur (mg/l)" value="Sulfate Sulfur"/>
-                    <Picker.Item label="Chlorine (mg/l)" value="Chlorine"/>
-                    <Picker.Item label="Specific Conductance (umhos/cc)" value="Specific Conductance"/>
-                </Picker>
+    return(
+        <Animated.View style={[
+            {
+              transform: [{ translateX: translateAnimation }],
+              opacity: opacityAnimation
+            }]}>
+            <View style={styles.addResultComponent}>
+                <Pressable 
+                style={({ pressed }) => [
+                    {
+                        backgroundColor: pressed ? Color.inputButton.pressed : Color.inputButton.fill
+                    },
+                    styles.removeResBtn,
+                ]}
+                onPress={removeItemHandler}>
+                    <Text style={styles.resInputBtn}>-</Text>
+                </Pressable>
+
+                <View>
+                    <Picker style={styles.picker}
+                        selectedValue={pickerValue}
+                        dropdownIconColor={'#D8EBF1'}
+                        onValueChange={(itemValue) => setPickerValue(itemValue)}>
+                        <Picker.Item label="-----" value=""/>
+                        <Picker.Item label="Total Coliform Bacteria (#/100ml)" value="Total Coliform Bacteria"/>
+                        <Picker.Item label="Nitrate-Nitrogen (mg/l)" value="Nitrate-Nitrogen"/>
+                        <Picker.Item label="pH (units)" value="pH"/>
+                        <Picker.Item label="Iron (mg/l)" value="Iron"/>
+                        <Picker.Item label="Hardness as CaCo3 (mg/l)" value="Hardness as CaCo3"/>
+                        <Picker.Item label="Sulfate Sulfur (mg/l)" value="Sulfate Sulfur"/>
+                        <Picker.Item label="Chlorine (mg/l)" value="Chlorine"/>
+                        <Picker.Item label="Specific Conductance (umhos/cc)" value="Specific Conductance"/>
+                    </Picker>
+                </View>
+                <TextInput style={styles.resultInput}></TextInput>
             </View>
-            <TextInput style={styles.resultInput}></TextInput>
-        </View>
+        </Animated.View>
     );
 };
 
@@ -84,7 +110,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#644535',
     },
-    addResBtn: {
+    removeResBtn: {
         width: 21,
         height: 21,
         backgroundColor: '#D8EBF1',
@@ -106,7 +132,16 @@ const styles = StyleSheet.create({
         color: '#D8EBF1',
         marginLeft: 15,
         marginTop: 5,
-    }
+    },
+    viewHolder: {
+        paddingVertical: 15,
+        backgroundColor: '#2196f3',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        margin: 4,
+        paddingLeft: 15,
+        borderRadius: 10
+      },
 });
 
 export default AddResult;

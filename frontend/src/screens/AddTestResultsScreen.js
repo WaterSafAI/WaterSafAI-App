@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, TextInput, View, Text } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Pressable, StyleSheet, TextInput, View, Text, TouchableOpacity, LayoutAnimation, Item, ScrollView } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { useAuth } from "../services/AuthProvider";
 import Toast from "../components/Toast"
@@ -12,9 +12,12 @@ const AddTestResultsScreen = () => {
     const [field3, setField3] = useState('');
     const [toast, setToast] = useState({});
     const [toastKey, setToastKey] = useState(0);
-    const [pickerValue, setPickerValue] = useState('');
     const { user, token } = useAuth();
     const userId = user.uid;
+    const [valueArray, setValueArray] = useState([]);
+    const [disabled, setDisabled] = useState(false);
+    const addNewEle = useRef(false);
+    const index = useRef(0);
 
     /**
      * Send a POST request to the backend server with the test results
@@ -32,7 +35,7 @@ const AddTestResultsScreen = () => {
         const payload = {
             result1: field1,
             result2: field2,
-            result3: field3
+            result3: field3,
         };
         const options = {
             method: "POST",
@@ -58,14 +61,27 @@ const AddTestResultsScreen = () => {
         }
     }
 
-    /**
-     * Helper function to clear fields on form submit
-     */
-    const clearFields = () => {
-        setField1('');
-        setField2('');
-        setField3('');
-    }
+    const afterAnimationComplete = () => {
+        index.current += 1;
+        setDisabled(false);
+    };
+
+    const addMore = () => {
+        addNewEle.current = true;
+        const newlyAddedValue = { id: "id_" + index.current, text: index.current + 1 };
+    
+        setDisabled(true);
+        setValueArray([...valueArray, newlyAddedValue]);
+    };
+    
+    const remove = (id) => {
+        addNewEle.current = false;
+        const newArray = [...valueArray];
+        newArray.splice(newArray.findIndex(ele => ele.id === id), 1);
+    
+        setValueArray(newArray);
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    };
 
     return (
         <View style={styles.container}>
@@ -86,10 +102,28 @@ const AddTestResultsScreen = () => {
                 <Text style={styles.headerTextType}>Type</Text>
                 <Text style={styles.headerTextValue}>Value</Text>
             </View>
-            <AddResult></AddResult>
-            <AddResult></AddResult>
-            <AddResult></AddResult>
-            <AddResult></AddResult>
+
+            <View style={{width: '100%', alignItems: 'center'}}>
+                <ScrollView style={{width: '100%', marginLeft: '20%'}}>
+                    {valueArray.map(ele => (
+                        <AddResult
+                        key={ele.id}
+                        item={ele}  // Pass the 'item' prop to AddResult
+                        afterAnimationComplete={afterAnimationComplete}
+                        removeItem={(id) => remove(id)}
+                        />
+                    ))}
+                </ScrollView>
+            </View>
+
+            <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.addComponent}
+                disabled={disabled}
+                onPress={addMore}
+            >
+                <Text style={styles.plusText}>+</Text>
+            </TouchableOpacity>
 
             <Pressable
                 onPress={handleAddResults}
@@ -173,6 +207,23 @@ const styles = StyleSheet.create({
         color: '#0A3465',
         fontWeight: 'bold',
     },
+    addComponent: {
+        position: 'absolute',
+        right: 25,
+        bottom: 25,
+        width: 70,
+        height: 70,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 30,
+        borderWidth: 3,
+        borderColor: '#0A3465',
+        backgroundColor: '#66B3CC',
+      },
+      plusText: {
+        fontSize: 40,
+        color: '#0A3465',
+      },
 });
 
 export default AddTestResultsScreen;
