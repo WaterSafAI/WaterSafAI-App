@@ -9,13 +9,15 @@ import AddResult from '../components/AddResult';
 const AddTestResultsScreen = () => {
     const [field1, setField1] = useState('');
     const [field2, setField2] = useState('');
-    const [field3, setField3] = useState('');
+
+    const [testDate, setTestDate] = useState('');
     const [toast, setToast] = useState({});
     const [toastKey, setToastKey] = useState(0);
-    const { user, token } = useAuth();
-    const userId = user.uid;
     const [valueArray, setValueArray] = useState([]);
     const [disabled, setDisabled] = useState(false);
+
+    const { user, token } = useAuth();
+    const userId = user.uid;
     const addNewEle = useRef(false);
     const index = useRef(0);
 
@@ -26,8 +28,13 @@ const AddTestResultsScreen = () => {
         setToastKey(toastKey + 1);
 
         // Check if fields are not empty
-        if (!field1 || !field2 || !field3) {
-            setToast({type: "error", message: "Please fill out all fields."});
+        if (valueArray.length < 1) {
+            setToast({type: "error", message: "Please add a test result."});
+            return;
+        }
+
+        if(testDate = '') {
+            setToast({type: "error", message: "Please add the test date."});
             return;
         }
 
@@ -35,7 +42,7 @@ const AddTestResultsScreen = () => {
         const payload = {
             result1: field1,
             result2: field2,
-            result3: field3,
+            DateOfTest: testDate, //figure out variable to assign
         };
         const options = {
             method: "POST",
@@ -55,10 +62,15 @@ const AddTestResultsScreen = () => {
             // Show success and clear form
             setToast({type: "success", message: "Test results added!"});
             clearFields();
+
         } catch (error) {
             console.error(`Error adding test results: ${error}`);
             setToast({type: "error", message: "Error adding test results."});
         }
+    }
+
+    const clearFields = () => {
+        setValueArray([]);
     }
 
     const afterAnimationComplete = () => {
@@ -95,7 +107,8 @@ const AddTestResultsScreen = () => {
                 <Text style={styles.dateText}>Test Date:</Text>
                 <TextInput style={styles.dateInput} 
                     placeholder='mm/yyyy'
-                    placeholderTextColor='#644535'>
+                    placeholderTextColor='#644535'
+                    value={testDate}>
                 </TextInput>
             </View>
             <View style={styles.header}>
