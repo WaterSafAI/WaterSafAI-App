@@ -107,8 +107,7 @@ const AddTestResultsScreen = () => {
                 <Text style={styles.dateText}>Test Date:</Text>
                 <TextInput style={styles.dateInput} 
                     placeholder='mm/yyyy'
-                    placeholderTextColor='#644535'
-                    value={testDate}>
+                    placeholderTextColor='#644535'>
                 </TextInput>
             </View>
             <View style={styles.header}>
