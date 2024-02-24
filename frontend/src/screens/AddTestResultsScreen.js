@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Pressable, StyleSheet, TextInput, View, Text, TouchableOpacity, LayoutAnimation, Item, ScrollView } from 'react-native';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { useAuth } from "../services/AuthProvider";
@@ -7,8 +7,6 @@ import { API_URL } from '../../constants';
 import AddResult from '../components/AddResult';
 
 const AddTestResultsScreen = () => {
-    const [field1, setField1] = useState('');
-    const [field2, setField2] = useState('');
 
     const [testDate, setTestDate] = useState('');
     const [toast, setToast] = useState({});
@@ -27,9 +25,13 @@ const AddTestResultsScreen = () => {
     const handleAddResults = async () => {
         setToastKey(toastKey + 1);
 
-        // Check if fields are not empty
-        if (valueArray.length < 1) {
-            setToast({type: "error", message: "Please add a test result."});
+        if (!pickerValue) {
+            setToast({type: "error", message: "Please select a value from the dropdown."});
+            return;
+        }
+
+        if(!textInputValue){
+            setToast({type: "error", message: "Please add result value."});
             return;
         }
 
@@ -40,9 +42,11 @@ const AddTestResultsScreen = () => {
 
         // Construct request
         const payload = {
-            result1: field1,
-            result2: field2,
-            DateOfTest: testDate, //figure out variable to assign
+            DateOfTest: testDate,
+            results: valueArray.map(item => ({
+                resultTypeName: item.pickerValue,
+                resultValue: item.textInputValue
+            }))
         };
         const options = {
             method: "POST",
@@ -71,7 +75,29 @@ const AddTestResultsScreen = () => {
 
     const clearFields = () => {
         setValueArray([]);
+        setTestDate('');
     }
+
+    const handleResultChange = (id, pickerValue, textInputValue) => {
+
+        try{
+            //find index of item
+            const index = valueArray.findIndex(item => item.id === id);
+            
+            //Update item with new values
+            const updateItem = {...valueArray[index], pickerValue, textInputValue };
+
+            //Update valueArray with updated item
+            const newArray = [...valueArray];
+            newArray[index] = updateItem;
+
+            setValueArray(newArray);
+        }
+        catch(error){
+            console.error(`Error handling result change: ${error}`);
+            setToast({type: "error", message: "Error handling result change."});
+        }
+    };
 
     const afterAnimationComplete = () => {
         index.current += 1;
@@ -107,7 +133,8 @@ const AddTestResultsScreen = () => {
                 <Text style={styles.dateText}>Test Date:</Text>
                 <TextInput style={styles.dateInput} 
                     placeholder='mm/yyyy'
-                    placeholderTextColor='#644535'>
+                    placeholderTextColor='#644535'
+                    onChangeText={testDate => setTestDate(testDate)}>
                 </TextInput>
             </View>
             <View style={styles.header}>

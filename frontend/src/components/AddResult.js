@@ -3,13 +3,19 @@ import {View, StyleSheet, Pressable, Text, TextInput, Dimensions, Animated} from
 import {Picker} from '@react-native-picker/picker'
 import {Color} from '../styles/index';
 
-const AddResult = ({ item, afterAnimationComplete, removeItem }) => {
+const AddResult = ({ item, afterAnimationComplete, removeItem, onResultChange }) => {
 
     const [pickerValue, setPickerValue] = useState('');
+    const [textInputValue, setTextInputValue] = useState('');
 
     const width = Dimensions.get('window').width;
     const animatedValue = useRef(new Animated.Value(0)).current;
     
+    //Handle changes from dropdown picker and value input
+    const handleResultChange = () => {
+        onResultChange(item.id, pickerValue, textInputValue);
+    }
+
     useEffect(() => {
         Animated.timing(
         animatedValue,
@@ -80,7 +86,10 @@ const AddResult = ({ item, afterAnimationComplete, removeItem }) => {
                         <Picker.Item label="Specific Conductance (umhos/cc)" value="Specific Conductance"/>
                     </Picker>
                 </View>
-                <TextInput style={styles.resultInput}></TextInput>
+                <TextInput 
+                    style={styles.resultInput}
+                    onChangeText={textInputValue => setTextInputValue(textInputValue)}>
+                </TextInput>
             </View>
         </Animated.View>
     );
