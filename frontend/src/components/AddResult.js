@@ -11,10 +11,10 @@ const AddResult = ({ item, afterAnimationComplete, removeItem, onResultChange })
     const width = Dimensions.get('window').width;
     const animatedValue = useRef(new Animated.Value(0)).current;
     
-    //Handle changes from dropdown picker and value input
-    const handleResultChange = () => {
+    // Handle changes from dropdown picker and value input
+    useEffect(() => {
         onResultChange(item.id, pickerValue, textInputValue);
-    }
+    }, [pickerValue, textInputValue]);
 
     useEffect(() => {
         Animated.timing(

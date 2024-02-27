@@ -25,28 +25,27 @@ const AddTestResultsScreen = () => {
     const handleAddResults = async () => {
         setToastKey(toastKey + 1);
 
-        if (!pickerValue) {
-            setToast({type: "error", message: "Please select a value from the dropdown."});
+        if (Object.keys(valueArray).length === 0) {
+            setToast({ type: "error", message: "Please add at least one test result." });
             return;
         }
 
-        if(!textInputValue){
-            setToast({type: "error", message: "Please add result value."});
+        const dateRegex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+        if (testDate && !dateRegex.test(testDate)) {
+            setToast({ type: "error", message: "Please enter a valid date (mm/yyyy)." });
             return;
         }
 
-        if(testDate = '') {
-            setToast({type: "error", message: "Please add the test date."});
-            return;
-        }
+        const [month, year] = testDate.split('/');
+        const results = valueArray.map(item => ({ 
+            [String(item.pickerValue).toLowerCase().replace(' ', '_')]: item.textInputValue 
+        }));
 
         // Construct request
         const payload = {
-            DateOfTest: testDate,
-            results: valueArray.map(item => ({
-                resultTypeName: item.pickerValue,
-                resultValue: item.textInputValue
-            }))
+            month: Number(month),
+            year: Number(year),
+            results: results
         };
         const options = {
             method: "POST",
@@ -57,6 +56,8 @@ const AddTestResultsScreen = () => {
             body: JSON.stringify(payload)
         };
 
+        console.log(`Sending test results: ${JSON.stringify(payload)}`);
+
         try {
             const response = await fetch(`${API_URL}/results/${userId}/`, options);
             if (!response.ok) {
@@ -64,12 +65,12 @@ const AddTestResultsScreen = () => {
             }
 
             // Show success and clear form
-            setToast({type: "success", message: "Test results added!"});
+            setToast({ type: "success", message: "Test results added!" });
             clearFields();
 
         } catch (error) {
             console.error(`Error adding test results: ${error}`);
-            setToast({type: "error", message: "Error adding test results."});
+            setToast({ type: "error", message: "Error adding test results." });
         }
     }
 
@@ -80,12 +81,12 @@ const AddTestResultsScreen = () => {
 
     const handleResultChange = (id, pickerValue, textInputValue) => {
 
-        try{
+        try {
             //find index of item
             const index = valueArray.findIndex(item => item.id === id);
-            
+
             //Update item with new values
-            const updateItem = {...valueArray[index], pickerValue, textInputValue };
+            const updateItem = { ...valueArray[index], pickerValue, textInputValue };
 
             //Update valueArray with updated item
             const newArray = [...valueArray];
@@ -93,9 +94,9 @@ const AddTestResultsScreen = () => {
 
             setValueArray(newArray);
         }
-        catch(error){
+        catch (error) {
             console.error(`Error handling result change: ${error}`);
-            setToast({type: "error", message: "Error handling result change."});
+            setToast({ type: "error", message: "Error handling result change." });
         }
     };
 
@@ -107,31 +108,31 @@ const AddTestResultsScreen = () => {
     const addMore = () => {
         addNewEle.current = true;
         const newlyAddedValue = { id: "id_" + index.current, text: index.current + 1 };
-    
+
         setDisabled(true);
         setValueArray([...valueArray, newlyAddedValue]);
     };
-    
+
     const remove = (id) => {
         addNewEle.current = false;
         const newArray = [...valueArray];
         newArray.splice(newArray.findIndex(ele => ele.id === id), 1);
-    
+
         setValueArray(newArray);
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     };
 
     return (
         <View style={styles.container}>
-            {toast.message && <Toast key={toastKey} message={toast.message} type={toast.type}/>}
+            {toast.message && <Toast key={toastKey} message={toast.message} type={toast.type} />}
             <Text style={{ color: Color.logo, fontSize: 32, fontWeight: 'bold', marginTop: 50, marginBottom: 30 }}>
                 Add Test Results
             </Text>
-            
+
             {/* Future: add validation restriction on date input */}
             <View style={styles.dateContainer}>
                 <Text style={styles.dateText}>Test Date:</Text>
-                <TextInput style={styles.dateInput} 
+                <TextInput style={styles.dateInput}
                     placeholder='mm/yyyy'
                     placeholderTextColor='#644535'
                     onChangeText={testDate => setTestDate(testDate)}>
@@ -142,14 +143,15 @@ const AddTestResultsScreen = () => {
                 <Text style={styles.headerTextValue}>Value</Text>
             </View>
 
-            <View style={{width: '100%', alignItems: 'center'}}>
-                <ScrollView style={{width: '100%', marginLeft: '20%'}}>
+            <View style={{ width: '100%', alignItems: 'center' }}>
+                <ScrollView style={{ width: '100%', marginLeft: '20%' }}>
                     {valueArray.map(ele => (
                         <AddResult
-                        key={ele.id}
-                        item={ele}  // Pass the 'item' prop to AddResult
-                        afterAnimationComplete={afterAnimationComplete}
-                        removeItem={(id) => remove(id)}
+                            key={ele.id}
+                            item={ele}  // Pass the 'item' prop to AddResult
+                            afterAnimationComplete={afterAnimationComplete}
+                            removeItem={(id) => remove(id)}
+                            onResultChange={handleResultChange}
                         />
                     ))}
                 </ScrollView>
@@ -212,7 +214,7 @@ const styles = StyleSheet.create({
         color: '#644535',
         fontWeight: 'bold',
         marginLeft: 10,
-        marginRight: 30, 
+        marginRight: 30,
         fontSize: 18,
     },
     headerTextValue: {
@@ -258,11 +260,11 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#0A3465',
         backgroundColor: '#66B3CC',
-      },
-      plusText: {
+    },
+    plusText: {
         fontSize: 40,
         color: '#0A3465',
-      },
+    },
 });
 
 export default AddTestResultsScreen;
