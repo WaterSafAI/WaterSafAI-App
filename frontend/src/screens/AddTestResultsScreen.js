@@ -38,7 +38,7 @@ const AddTestResultsScreen = () => {
 
         const [month, year] = testDate.split('/');
         const results = valueArray.map(item => ({ 
-            [String(item.pickerValue).toLowerCase().replace(' ', '_')]: item.textInputValue 
+            [String(item.pickerValue).toLowerCase().replace(/ /g, '_')]: Number(item.textInputValue)
         }));
 
         // Construct request
