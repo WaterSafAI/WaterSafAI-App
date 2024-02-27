@@ -37,9 +37,10 @@ const AddTestResultsScreen = () => {
         }
 
         const [month, year] = testDate.split('/');
-        const results = valueArray.map(item => ({ 
+        const results = valueArray.reduce((acc, item) => ({
+            ...acc,
             [String(item.pickerValue).toLowerCase().replace(/ /g, '_')]: Number(item.textInputValue)
-        }));
+        }), {});
 
         // Construct request
         const payload = {
@@ -64,13 +65,13 @@ const AddTestResultsScreen = () => {
                 throw new Error(`Response code: ${response.status}`);
             }
 
-            // Show success and clear form
+            // Show success
             setToast({ type: "success", message: "Test results added!" });
-            clearFields();
-
         } catch (error) {
             console.error(`Error adding test results: ${error}`);
             setToast({ type: "error", message: "Error adding test results." });
+        } finally {
+            clearFields();
         }
     }
 
