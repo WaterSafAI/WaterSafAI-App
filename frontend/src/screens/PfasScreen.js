@@ -4,7 +4,7 @@ import { Color } from '../styles';
 
 const Card = ({ title }) => (
     <View style={styles.card}>
-        <Text>{title}</Text>
+        <Text style={styles.cardText}>{title}</Text>
     </View>
 );
 
@@ -61,13 +61,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 10,
         paddingLeft: 10,
+        color: '#0A3465',
     },
     filterContainer: {
         flexDirection: 'row',
         marginBottom: 10,
     },
     pill: {
-        backgroundColor: 'gray',
+        backgroundColor: '#66B3CC',
         borderRadius: 20,
         padding: 10,
         marginRight: 10,
@@ -96,6 +97,11 @@ const styles = StyleSheet.create({
         shadowRadius: 2,  
         elevation: 5,
     },
+    cardText: {
+        color: '#0A3465',
+        fontWeight: 'bold',
+        fontSize: 16
+    }
 });
 
 export default PfasScreen;
