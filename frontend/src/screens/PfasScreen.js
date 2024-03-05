@@ -18,7 +18,7 @@ const PfasScreen = () => {
     const [search, setSearch] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
 
-    const filters = ['All', 'Filter 1', 'Filter 2'];
+    const filters = ['All', 'Isotopes', 'Multi Component'];
         // Dummy data for example
         const results = {
             data: [

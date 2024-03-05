@@ -41,7 +41,7 @@ const ViolationsScreen = () => {
             <ScrollView>
                 {/* Replace this with your actual data */}
                 {Array(15).fill().map((_, i) => (
-                    <Card key={i} title={`Post ${i + 1}`} />
+                    <Card key={i} title={`Violation ${i + 1}`} />
                 ))}
             </ScrollView>
         </View>
