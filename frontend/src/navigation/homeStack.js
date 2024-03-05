@@ -49,7 +49,7 @@ const HomeStack = ({ navigation, route }) => {
             />
             <Stack.Screen name="Add Test Results" component={AddTestResultsScreen} />
             <Stack.Screen name="View Test Results" component={ViewResultsScreen} />
-            <Stack.Screen name="ViewSolutionsScreen" component={ViewSolutionsScreen} />
+            <Stack.Screen name="View Solutions" component={ViewSolutionsScreen} />
             <Stack.Screen 
                 name="Profile" 
                 component={ProfileScreen} 

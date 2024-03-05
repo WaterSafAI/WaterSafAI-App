@@ -20,7 +20,7 @@ const ViewResultsScreen = ({ navigation}) => {
     };
 
     const handleViewSolutions = () => {
-        navigation.navigate("ViewSolutionsScreen");
+        navigation.navigate("View Solutions");
     }
 
     return (
