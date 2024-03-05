@@ -19,6 +19,32 @@ const PfasScreen = () => {
     const [selectedFilter, setSelectedFilter] = useState('All');
 
     const filters = ['All', 'Filter 1', 'Filter 2'];
+        // Dummy data for example
+        const results = {
+            data: [
+                { name: '1-Pentafluoroethylethanol'},
+                { name: 'Perfluoroglutaryl difluoride'},
+                { name: '4:2 Fluorotelomer alcohol'},
+                { name: 'Sevoflurane'},
+                { name: '3:1 Fluorotelomer alcohol'},
+                { name: 'Perfluoropentanamide'},
+                { name: 'Methyl 2H,2H,3H,3H-perfluoroheptanoate'},
+                { name: 'Perfluorooctanoic acid'},
+                { name: '2H,2H,3H,3H-Perfluorooctanoic acid'},
+                { name: 'Perfluoroisobutyl methyl ether'},
+                { name: '6H-Perfluorohex-1-ene'},
+                { name: 'Potassium perfluorobutanesulfonate'},
+                { name: 'Nonafluoropentanamide'},
+                { name: '2-(Perfluorobutyl)-1-ethanesulfonic acid'},
+                { name: 'Methyl perfluorobutanoate'},
+                { name: '4H-Perfluorobutanoic acid'},
+                { name: 'Methyl perfluoroethyl ketone'},
+                { name: '2-(Trifluoromethoxy)ethyl trifluoromethanesulfonate'},
+                { name: 'Hexafluoroamylene glycol'},
+                { name: '2-(Perfluorohexyl)ethanol'},
+                { name: 'Perfluorobutanoic acid'},
+            ],
+        };
 
     return (
         <View style={styles.container}>
@@ -39,9 +65,8 @@ const PfasScreen = () => {
                 ))}
             </View>
             <ScrollView>
-                {/* Replace this with your actual data */}
-                {Array(15).fill().map((_, i) => (
-                    <Card key={i} title={`Post ${i + 1}`} />
+                {results.data.map((item, index) => (
+                    <Card key={index} title={item.name} />
                 ))}
             </ScrollView>
         </View>

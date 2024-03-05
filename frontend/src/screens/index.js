@@ -8,6 +8,7 @@ import ViewResultsScreen from './ViewResultsScreen';
 import ViolationsScreen from './ViolationsScreen';
 import PfasScreen from './PfasScreen';
 import MapScreen from './MapScreen';
+import ViewSolutionsScreen from './ViewSolutionsScreen';
 
 export { 
     Login, 
@@ -19,5 +20,6 @@ export {
     ViewResultsScreen,
     ViolationsScreen,
     PfasScreen,
-    MapScreen
+    MapScreen,
+    ViewSolutionsScreen
 };

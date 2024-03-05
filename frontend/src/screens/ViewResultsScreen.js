@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Buttons, Color } from '../styles';
 
-
-const ViewResultsScreen = () => {
+const ViewResultsScreen = ({ navigation}) => {
     // Dummy data for example
     const results = {
         companyName: 'Company name',
@@ -20,9 +19,8 @@ const ViewResultsScreen = () => {
         ],
     };
 
-
     const handleViewSolutions = () => {
-        // Handle view solutions
+        navigation.navigate("ViewSolutionsScreen");
     }
 
     return (
