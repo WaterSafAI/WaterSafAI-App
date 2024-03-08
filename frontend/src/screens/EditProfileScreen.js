@@ -38,12 +38,14 @@ function EditProfileScreen({ navigation }) {
                 const json = await response.json();
 
                 // Deconstruct user document
-                const { displayName, email, plan } = json;
+                const { displayName, email, plan, location, company } = json;
 
                 // Set user data
                 setUserName(displayName);
                 setUserEmail(email);
                 setUserAccountType(plan);
+                setUserLocation(location);
+                setCompanyName(company);
             } catch (error) {
                 console.error(`Error fetching user data: ${error}`)
             }

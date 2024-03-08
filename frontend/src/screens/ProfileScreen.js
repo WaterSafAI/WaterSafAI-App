@@ -10,6 +10,8 @@ function ProfileScreen({ navigation }) {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userAccountType, setUserAccountType] = useState('');
+    const [userLocation, setUserLocation] = useState('');
+    const [companyName, setCompanyName] = useState('');
     const [toast, setToast] = useState({});
     const [toastKey, setToastKey] = useState(0);
     const { user, token, actions } = useAuth();
@@ -35,12 +37,14 @@ function ProfileScreen({ navigation }) {
                 const json = await response.json();
 
                 // Deconstruct user document
-                const { displayName, email, plan } = json;
+                const { displayName, email, plan, location, company } = json;
 
                 // Set user data
                 setUserName(displayName);
                 setUserEmail(email);
                 setUserAccountType(plan);
+                setUserLocation(location);
+                setCompanyName(company);
             } catch (error) {
                 console.error(`Error fetching user data: ${error}`)
             }
@@ -107,7 +111,7 @@ function ProfileScreen({ navigation }) {
                 <View style={styles.inputBox}>
                     <FontAwesome name="map-marker" size={20} color="#0A3465" />
                     <Text style={styles.inputTextHeader}>Location: </Text>
-                    <Text style={styles.inputText}>1234 Research Parkway, Orlando FL 32826</Text>
+                    <Text style={styles.inputText}>{userLocation}</Text>
                 </View>
             </View>
 
@@ -115,7 +119,7 @@ function ProfileScreen({ navigation }) {
                 <View style={styles.inputBox}>
                     <FontAwesome name="building" size={20} color="#0A3465" />
                     <Text style={styles.inputTextHeader}>Company: </Text>
-                    <Text style={styles.inputText}>Siemens Energy</Text>
+                    <Text style={styles.inputText}>{companyName}</Text>
                 </View>
             </View>
 
