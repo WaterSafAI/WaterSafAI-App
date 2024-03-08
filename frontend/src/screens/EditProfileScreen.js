@@ -7,6 +7,7 @@ import { useAuth } from "../services/AuthProvider";
 import { API_URL } from '../../constants';
 
 function EditProfileScreen({ navigation }) {
+    const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [userAccountType, setUserAccountType] = useState('');
     const [userLocation, setUserLocation] = useState('');
@@ -17,6 +18,41 @@ function EditProfileScreen({ navigation }) {
     const { user, token, actions } = useAuth();
     const userId = user.uid;
 
+    /**
+     * This effect will populate the displayed user's data.
+     */
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Construct request
+                const options = {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                };
+
+                // Get user document
+                const response = await fetch(`${API_URL}/users/${userId}/`, options);
+                const json = await response.json();
+
+                // Deconstruct user document
+                const { displayName, email, plan } = json;
+
+                // Set user data
+                setUserName(displayName);
+                setUserEmail(email);
+                setUserAccountType(plan);
+            } catch (error) {
+                console.error(`Error fetching user data: ${error}`)
+            }
+        }
+
+        fetchData();
+    }, [user])
+    
+    //Save Update information
     const handleSave = async () => {
         setToastKey(toastKey + 1);
 
@@ -56,17 +92,23 @@ function EditProfileScreen({ navigation }) {
         <View style={styles.container}>
             {toast.message && <Toast key={toastKey} message={toast.message} type={toast.type}/>}
             <View style={styles.useNameBackground}>
-                <Text style={styles.userName}></Text>
+                <TextInput 
+                    style={styles.userName}
+                    placeholder={userName}
+                    placeholderTextColor={styles.namePlaceholder}
+                    onChangeText={text => setUserName(text)}
+                />
             </View>
 
             <View style={styles.topInput}></View>
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="envelope" size={20} color="#0A3465" />
+                    <Text style={styles.inputTextHeader}>Email: </Text>
                     <TextInput
                         style={styles.inputText}
                         fontSize={16}
-                        placeholder='graysoncrozier40@gmail.com'
+                        placeholder={userEmail}
                         placeholderTextColor={Color.inputs.text}
                         onChangeText={text => setUserEmail(text)}
                         value={userEmail}
@@ -77,10 +119,11 @@ function EditProfileScreen({ navigation }) {
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="briefcase" size={20} color="#0A3465" />
+                    <Text style={styles.inputTextHeader}>Account Type: </Text>
                     <TextInput
                         style={styles.inputText}
                         fontSize={16}
-                        placeholder='professional'
+                        placeholder={userAccountType}
                         placeholderTextColor={Color.inputs.text}
                         onChangeText={text => setUserAccountType(text)}
                         value={userAccountType}
@@ -91,10 +134,11 @@ function EditProfileScreen({ navigation }) {
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="map-marker" size={20} color="#0A3465" />
+                    <Text style={styles.inputTextHeader}>Location: </Text>
                     <TextInput
                         style={styles.inputText}
                         fontSize={16}
-                        placeholder='123 Hey Lane'
+                        placeholder={userLocation}
                         placeholderTextColor={Color.inputs.text}
                         onChangeText={text => setUserLocation(text)}
                         value={userLocation}
@@ -105,10 +149,11 @@ function EditProfileScreen({ navigation }) {
             <View style={styles.inputView}>
                 <View style={styles.inputBox}>
                     <FontAwesome name="building" size={20} color="#0A3465" />
+                    <Text style={styles.inputTextHeader}>Company: </Text>
                     <TextInput
                         style={styles.inputText}
                         fontSize={16}
-                        placeholder='Money LLC'
+                        placeholder={companyName}
                         placeholderTextColor={Color.inputs.text}
                         onChangeText={text => setCompanyName(text)}
                         value={companyName}
