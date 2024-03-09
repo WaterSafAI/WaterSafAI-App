@@ -144,19 +144,17 @@ const AddTestResultsScreen = () => {
                 <Text style={styles.headerTextValue}>Value</Text>
             </View>
 
-            <View style={{ width: '100%', alignItems: 'center' }}>
-                <ScrollView style={{ width: '100%', marginLeft: '20%' }}>
-                    {valueArray.map(ele => (
-                        <AddResult
-                            key={ele.id}
-                            item={ele}  // Pass the 'item' prop to AddResult
-                            afterAnimationComplete={afterAnimationComplete}
-                            removeItem={(id) => remove(id)}
-                            onResultChange={handleResultChange}
-                        />
-                    ))}
-                </ScrollView>
-            </View>
+            <ScrollView style={{ width: '100%', marginLeft: '20%' }}>
+                {valueArray.map(ele => (
+                    <AddResult
+                        key={ele.id}
+                        item={ele}  // Pass the 'item' prop to AddResult
+                        afterAnimationComplete={afterAnimationComplete}
+                        removeItem={(id) => remove(id)}
+                        onResultChange={handleResultChange}
+                    />
+                ))}
+            </ScrollView>
 
             <TouchableOpacity
                 activeOpacity={0.8}
@@ -198,8 +196,13 @@ const styles = StyleSheet.create({
         ...Inputs.links
     },
     addBtn: {
-        ...Buttons.buttonContainer,
+        width: "60%",
+        height: 60,
+        borderRadius: 15,
+        padding: 15,
         marginTop: 32,
+        marginBottom: 30,
+        marginRight: 60,
     },
     btnText: {
         ...Buttons.buttonText
