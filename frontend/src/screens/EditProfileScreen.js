@@ -99,6 +99,7 @@ function EditProfileScreen({ navigation }) {
                     placeholder={userName}
                     placeholderTextColor={styles.namePlaceholder}
                     onChangeText={text => setUserName(text)}
+                    value={userName}
                 />
             </View>
 
