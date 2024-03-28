@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native';
 import { Color, Screens, Buttons } from '../styles/index';
 import { useAuth } from '../services/AuthProvider';
 import * as Location from 'expo-location';
@@ -129,9 +129,13 @@ function HomeScreen(props) {
 
     const handleAddTestResults = () => {
         // Handle professional add test results
-        navigation.navigate('Add Test Results')
+        navigation.navigate('Add Test Results');
     }
 
+    const handleAddSolution = () => {
+        // Handle professional add solution
+        navigation.navigate('Add Solution');
+    }
     const handleDiscoverWaterQuality = () => {
         // Handle discover water quality button press
         console.log('Calling backend to discover water quality');
@@ -150,18 +154,26 @@ function HomeScreen(props) {
                 <Text style={styles.location}>{userAddressDisplay()}</Text>
             </Text>
 
-            {userAccountType === 'professional' ?
-                <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
-                    <Text style={styles.buttonText}>Add Test Results</Text>
-                </Pressable> : null}
+            <ScrollView style={styles.scrollContainer}>
 
-            <Pressable style={styles.buttonContainer} onPress={handleDiscoverWaterQuality}>
-                <Text style={styles.buttonText}>Discover Your Water Quality</Text>
-            </Pressable>
+                {userAccountType === 'professional' ?
+                    <Pressable style={styles.buttonContainer} onPress={handleAddTestResults}>
+                        <Text style={styles.buttonText}>Add Test Results</Text>
+                    </Pressable> : null}
 
-            <Pressable style={[styles.buttonContainer, styles.loginButton]} onPress={handleViewResults}>
-                <Text style={styles.buttonText}>View Your Results</Text>
-            </Pressable>
+                <Pressable style={styles.buttonContainer} onPress={handleDiscoverWaterQuality}>
+                    <Text style={styles.buttonText}>Discover Your Water Quality</Text>
+                </Pressable>
+
+                <Pressable style={[styles.buttonContainer, styles.loginButton]} onPress={handleViewResults}>
+                    <Text style={styles.buttonText}>View Your Results</Text>
+                </Pressable>
+
+                {userAccountType === 'professional' ?
+                    <Pressable style={styles.buttonContainer} onPress={handleAddSolution}>
+                        <Text style={styles.buttonText}>Add Solution</Text>
+                    </Pressable> : null}
+            </ScrollView>
         </View>
     );
 }
@@ -169,6 +181,12 @@ function HomeScreen(props) {
 const styles = StyleSheet.create({
     container: {
         ...Screens.mainScreen
+    },
+    scrollContainer:{
+        flex: 1,
+        backgroundColor: '#ADD8E6',
+        minWidth: '100%',
+        marginLeft: '22%'
     },
     title: {
         fontSize: 30,

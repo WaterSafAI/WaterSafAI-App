@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useNavigation } from 'react';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, ProfileScreen, EditProfileScreen, AddTestResultsScreen, ViewResultsScreen, ViolationsScreen, PfasScreen, MapScreen, ViewSolutionsScreen } from "../screens";
+import { HomeScreen, ProfileScreen, EditProfileScreen, AddTestResultsScreen, ViewResultsScreen, ViolationsScreen, PfasScreen, MapScreen, ViewSolutionsScreen, AddSolutionScreen } from "../screens";
 import { TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
@@ -22,7 +22,7 @@ const HomeNavigatorSettings = {
 // Home Stack Navigator
 const HomeStack = ({ navigation, route }) => {
     useLayoutEffect(() => {
-        const screens = ['Add Test Results', 'View Test Results', 'Profile', 'Edit Profile'];
+        const screens = ['Add Test Results', 'View Test Results', 'Profile', 'Edit Profile', 'Add Solution'];
         const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
         if (screens.includes(routeName)) {
             navigation.setOptions({ tabBarStyle: { display: 'none' } });
@@ -50,6 +50,8 @@ const HomeStack = ({ navigation, route }) => {
             <Stack.Screen name="Add Test Results" component={AddTestResultsScreen} />
             <Stack.Screen name="View Test Results" component={ViewResultsScreen} />
             <Stack.Screen name="View Solutions" component={ViewSolutionsScreen} />
+            <Stack.Screen name="Add Solution" component={AddSolutionScreen} />
+
             <Stack.Screen 
                 name="Profile" 
                 component={ProfileScreen} 
