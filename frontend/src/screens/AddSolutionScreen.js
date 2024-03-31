@@ -14,8 +14,7 @@ const AddSolutionScreen = () => {
     const [valueArray, setValueArray] = useState([]);
     const [disabled, setDisabled] = useState(false);
 
-    const { user, token } = useAuth();
-    const userId = user.uid;
+    const { token } = useAuth();
     const addNewEle = useRef(false);
     const index = useRef(0);
 
@@ -51,7 +50,7 @@ const AddSolutionScreen = () => {
         console.log(`Sending solution results: ${JSON.stringify(payload)}`);
         
         try {
-            const response = await fetch(`${API_URL}/solutions/${userId}/`, options); //May need to change
+            const response = await fetch(`${API_URL}/solutions/`, options); //May need to change (Add location?)
             if (!response.ok) {
                 throw new Error(`Response code: ${response.status}`);
             }

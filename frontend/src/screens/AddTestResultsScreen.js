@@ -60,7 +60,7 @@ const AddTestResultsScreen = () => {
         console.log(`Sending test results: ${JSON.stringify(payload)}`);
 
         try {
-            const response = await fetch(`${API_URL}/results/${userId}/`, options);
+            const response = await fetch(`${API_URL}/results/${userId}/`, options); //Possibly change userId to locationId?
             if (!response.ok) {
                 throw new Error(`Response code: ${response.status}`);
             }
