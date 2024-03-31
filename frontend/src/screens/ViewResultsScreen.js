@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Buttons, Color } from '../styles';
+import { useAuth } from "../services/AuthProvider";
+import { API_URL } from '../../constants';
 
 const ViewResultsScreen = ({ navigation}) => {
 
     const [companyName, setCompanyName] = useState('');
     const [testDate, setTestDate] = useState('');
     const [data, setDataArray] = useState([]);
+    const {token} = useAuth();
 
     // // Dummy data for example
     // const results = {
@@ -39,7 +42,7 @@ const ViewResultsScreen = ({ navigation}) => {
                     },
                 };
 
-                const response = await fetch(`${API_URL}/results/${userId}/`, options);
+                const response = await fetch(`${API_URL}/results/`, options); //May need to change (Add specific location)
                 const json = await response.json();
 
                 const {company, date, res} = json;

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Color } from '../styles';
+import { useAuth } from "../services/AuthProvider";
+import { API_URL } from '../../constants';
 
 const Card = ({ title }) => (
     <View style={styles.card}>
@@ -19,6 +21,7 @@ const ViolationsScreen = () => {
     const [selectedFilter, setSelectedFilter] = useState('All');
     const [data, setDataArray] = useState([]);
     const [filters, setFiltersArray] = useState([]);
+    const {token} = useAuth();
 
     /**
      * This effect will populate the list of violations
@@ -35,7 +38,7 @@ const ViolationsScreen = () => {
                     },
                 };
 
-                const response = await fetch(`${API_URL}/violations/${userId}/`, options); //Not sure if ${userId} is needed?
+                const response = await fetch(`${API_URL}/violations/`, options); //May need to change
                 const json = await response.json();
 
                 const {filters, res} = json;  

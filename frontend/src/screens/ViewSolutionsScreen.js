@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Buttons, Color } from '../styles';
+import { useAuth } from "../services/AuthProvider";
+import { API_URL } from '../../constants';
 
 const ViewSolutionsScreen = () => {
 
     const [data, setDataArray] = useState([]);
+    const {token} = useAuth();
 
     // Dummy data for example
     // const results = {
@@ -35,7 +38,7 @@ const ViewSolutionsScreen = () => {
                         },
                     };
     
-                    const response = await fetch(`${API_URL}/solutions/${userId}/`, options); //may need to change
+                    const response = await fetch(`${API_URL}/solutions/`, options); //may need to change (Add specific location)
                     const json = await response.json();
     
                     const {res} = json; 
