@@ -4,20 +4,52 @@ import { Buttons, Color } from '../styles';
 
 const ViewSolutionsScreen = () => {
 
-    // Dummy data for example
-    const results = {
-        data: [
-            { solution: 'Call a professional'},
-            { solution: 'Install a water filter'},
-            { solution: 'Alkalize your water'},
-            { solution: 'Clean or replace your pipes'},
-            { solution: 'Iron filtration system'},
-            { solution: 'Chlorine filtration system'},
-            { solution: 'Ultraviolet water disinfection system'},
-            { solution: 'Reverse Osmosis'},
-        ],
-    };
+    const [data, setDataArray] = useState([]);
 
+    // Dummy data for example
+    // const results = {
+    //     data: [
+    //         { solution: 'Call a professional'},
+    //         { solution: 'Install a water filter'},
+    //         { solution: 'Alkalize your water'},
+    //         { solution: 'Clean or replace your pipes'},
+    //         { solution: 'Iron filtration system'},
+    //         { solution: 'Chlorine filtration system'},
+    //         { solution: 'Ultraviolet water disinfection system'},
+    //         { solution: 'Reverse Osmosis'},
+    //     ],
+    // };
+
+        /**
+     * This effect will populate the water solutions for the given location.
+     */
+        useEffect(() => {
+            const fetchData = async () => {
+                try {
+                    // Construct request
+                    const options = {
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                    };
+    
+                    const response = await fetch(`${API_URL}/solutions/${userId}/`, options); //may need to change
+                    const json = await response.json();
+    
+                    const {res} = json; 
+
+                    // Set data
+                    setDataArray(res);
+    
+                } catch (error) {
+                    console.error(`Error fetching location's solutions: ${error}`)
+                }
+            }
+            fetchData();
+        })
+    
     const Card = ({ title }) => (
         <View style={styles.card}>
             <Text style={styles.cardText}>{title}</Text>
@@ -28,7 +60,7 @@ const ViewSolutionsScreen = () => {
         <View style={styles.container}>
             <Text style={styles.header}>Quality Solutions</Text>
             <ScrollView >
-                {results.data.map((item, index) => (
+                {data.map((item, index) => (
                     <Card key={index} title={item.solution} />
                 ))}
             </ScrollView>

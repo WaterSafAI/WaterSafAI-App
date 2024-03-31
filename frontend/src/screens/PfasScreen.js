@@ -17,35 +17,68 @@ const FilterPill = ({ label, selected, onSelect }) => (
 const PfasScreen = () => {
     const [search, setSearch] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
+    const [data, setDataArray] = useState([]);
+    const [filters, setFiltersArray] = useState([]);
 
-    const filters = ['All', 'Isotopes', 'Multi Component'];
-        // Dummy data for example
-        const results = {
-            data: [
-                { name: '1-Pentafluoroethylethanol'},
-                { name: 'Perfluoroglutaryl difluoride'},
-                { name: '4:2 Fluorotelomer alcohol'},
-                { name: 'Sevoflurane'},
-                { name: '3:1 Fluorotelomer alcohol'},
-                { name: 'Perfluoropentanamide'},
-                { name: 'Methyl 2H,2H,3H,3H-perfluoroheptanoate'},
-                { name: 'Perfluorooctanoic acid'},
-                { name: '2H,2H,3H,3H-Perfluorooctanoic acid'},
-                { name: 'Perfluoroisobutyl methyl ether'},
-                { name: '6H-Perfluorohex-1-ene'},
-                { name: 'Potassium perfluorobutanesulfonate'},
-                { name: 'Nonafluoropentanamide'},
-                { name: '2-(Perfluorobutyl)-1-ethanesulfonic acid'},
-                { name: 'Methyl perfluorobutanoate'},
-                { name: '4H-Perfluorobutanoic acid'},
-                { name: 'Methyl perfluoroethyl ketone'},
-                { name: '2-(Trifluoromethoxy)ethyl trifluoromethanesulfonate'},
-                { name: 'Hexafluoroamylene glycol'},
-                { name: '2-(Perfluorohexyl)ethanol'},
-                { name: 'Perfluorobutanoic acid'},
-            ],
-        };
+    // const filters = ['All', 'Isotopes', 'Multi Component'];
+    //     // Dummy data for example
+    //     const results = {
+    //         data: [
+    //             { name: '1-Pentafluoroethylethanol'},
+    //             { name: 'Perfluoroglutaryl difluoride'},
+    //             { name: '4:2 Fluorotelomer alcohol'},
+    //             { name: 'Sevoflurane'},
+    //             { name: '3:1 Fluorotelomer alcohol'},
+    //             { name: 'Perfluoropentanamide'},
+    //             { name: 'Methyl 2H,2H,3H,3H-perfluoroheptanoate'},
+    //             { name: 'Perfluorooctanoic acid'},
+    //             { name: '2H,2H,3H,3H-Perfluorooctanoic acid'},
+    //             { name: 'Perfluoroisobutyl methyl ether'},
+    //             { name: '6H-Perfluorohex-1-ene'},
+    //             { name: 'Potassium perfluorobutanesulfonate'},
+    //             { name: 'Nonafluoropentanamide'},
+    //             { name: '2-(Perfluorobutyl)-1-ethanesulfonic acid'},
+    //             { name: 'Methyl perfluorobutanoate'},
+    //             { name: '4H-Perfluorobutanoic acid'},
+    //             { name: 'Methyl perfluoroethyl ketone'},
+    //             { name: '2-(Trifluoromethoxy)ethyl trifluoromethanesulfonate'},
+    //             { name: 'Hexafluoroamylene glycol'},
+    //             { name: '2-(Perfluorohexyl)ethanol'},
+    //             { name: 'Perfluorobutanoic acid'},
+    //         ],
+    //     };
 
+    /**
+     * This effect will populate the list of PFAS
+     */
+                useEffect(() => {
+                    const fetchData = async () => {
+                        try {
+                            // Construct request
+                            const options = {
+                                method: "GET",
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                },
+                            };
+            
+                            const response = await fetch(`${API_URL}/PFAS/${userId}/`, options); //Not sure if ${userId} is needed?
+                            const json = await response.json();
+            
+                            const {filters, res} = json;  
+   
+                            // Set data
+                            setDataArray(res);
+                            setFiltersArray(filters);
+
+                        } catch (error) {
+                            console.error(`Error fetching PFAS list: ${error}`)
+                        }
+                    }
+                    fetchData();
+                })
+        
     return (
         <View style={styles.container}>
             <TextInput
@@ -65,7 +98,7 @@ const PfasScreen = () => {
                 ))}
             </View>
             <ScrollView>
-                {results.data.map((item, index) => (
+                {data.map((item, index) => (
                     <Card key={index} title={item.name} />
                 ))}
             </ScrollView>

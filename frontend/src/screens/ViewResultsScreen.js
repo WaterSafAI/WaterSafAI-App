@@ -3,21 +3,58 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Buttons, Color } from '../styles';
 
 const ViewResultsScreen = ({ navigation}) => {
-    // Dummy data for example
-    const results = {
-        companyName: 'Company name',
-        testDate: '08/28/2013',
-        data: [
-            { analysis: 'Total Coliform Bacteria', result: '50', units: '#/100ml' },
-            { analysis: 'Nitrate-Nitrogen', result: '4.55', units: 'mg/l' },
-            { analysis: 'pH', result: '7.50', units: 'units' },
-            { analysis: 'Iron', result: '0.55', units: 'mg/l' },
-            { analysis: 'Hardness as CaCo3', result: '280', units: 'mg/l' },
-            { analysis: 'Sulfate Sulfur', result: '32.0', units: 'mg/l' },
-            { analysis: 'Chlorine', result: '25.4', units: 'mg/l' },
-            { analysis: 'Specific Conductance', result: '344', units: 'umhos/cc' },
-        ],
-    };
+
+    const [companyName, setCompanyName] = useState('');
+    const [testDate, setTestDate] = useState('');
+    const [data, setDataArray] = useState([]);
+
+    // // Dummy data for example
+    // const results = {
+    //     companyName: 'Company name',
+    //     testDate: '08/28/2013',
+    //     data: [
+    //         { analysis: 'Total Coliform Bacteria', result: '50', units: '#/100ml' },
+    //         { analysis: 'Nitrate-Nitrogen', result: '4.55', units: 'mg/l' },
+    //         { analysis: 'pH', result: '7.50', units: 'units' },
+    //         { analysis: 'Iron', result: '0.55', units: 'mg/l' },
+    //         { analysis: 'Hardness as CaCo3', result: '280', units: 'mg/l' },
+    //         { analysis: 'Sulfate Sulfur', result: '32.0', units: 'mg/l' },
+    //         { analysis: 'Chlorine', result: '25.4', units: 'mg/l' },
+    //         { analysis: 'Specific Conductance', result: '344', units: 'umhos/cc' },
+    //     ],
+    // };
+
+    /**
+     * This effect will populate the test results for the given location.
+     */
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Construct request
+                const options = {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                };
+
+                const response = await fetch(`${API_URL}/results/${userId}/`, options);
+                const json = await response.json();
+
+                const {company, date, res} = json;
+
+                // Set data
+                setCompanyName(company);
+                setTestDate(date);
+                setDataArray(res);
+
+            } catch (error) {
+                console.error(`Error fetching location's results: ${error}`)
+            }
+        }
+        fetchData();
+    })
 
     const handleViewSolutions = () => {
         navigation.navigate("View Solutions");
@@ -28,11 +65,11 @@ const ViewResultsScreen = ({ navigation}) => {
             <Text style={styles.header}>Water Quality Results</Text>
             <Text style={{textAlign: 'center', marginBottom: 10}}>
                 <Text style={styles.subHeader}>Tested By: </Text>
-                <Text style={styles.subHeaderRes}>{results.companyName}</Text>
+                <Text style={styles.subHeaderRes}>{companyName}</Text>
             </Text>
             <Text style={{textAlign: 'center', marginBottom: 25}}>
                 <Text style={styles.subHeader}>Test Date: </Text>
-                <Text style={styles.subHeaderRes}>{results.testDate}</Text>
+                <Text style={styles.subHeaderRes}>{testDate}</Text>
             </Text>
 
             <View style={styles.resultBox}>
@@ -46,7 +83,7 @@ const ViewResultsScreen = ({ navigation}) => {
 
                 {/* Results Rows */}
                 <View style={styles.resultsContainer}>
-                    {results.data.map((item, index) => (
+                    {data.map((item, index) => (
                         <View key={index} style={styles.resultRow}>
                             <Text style={styles.analysis}>{item.analysis}</Text>
                             <Text style={styles.result}>{item.result}</Text>

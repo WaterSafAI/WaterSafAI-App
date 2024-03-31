@@ -17,8 +17,39 @@ const FilterPill = ({ label, selected, onSelect }) => (
 const ViolationsScreen = () => {
     const [search, setSearch] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
+    const [data, setDataArray] = useState([]);
+    const [filters, setFiltersArray] = useState([]);
 
-    const filters = ['All', 'Filter 1', 'Filter 2'];
+    /**
+     * This effect will populate the list of violations
+     */
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Construct request
+                const options = {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                };
+
+                const response = await fetch(`${API_URL}/violations/${userId}/`, options); //Not sure if ${userId} is needed?
+                const json = await response.json();
+
+                const {filters, res} = json;  
+
+                // Set data
+                setDataArray(res);
+                setFiltersArray(filters);
+
+            } catch (error) {
+                console.error(`Error fetching violation list: ${error}`)
+            }
+        }
+        fetchData();
+    })
 
     return (
         <View style={styles.container}>
@@ -39,9 +70,8 @@ const ViolationsScreen = () => {
                 ))}
             </View>
             <ScrollView>
-                {/* Replace this with your actual data */}
-                {Array(15).fill().map((_, i) => (
-                    <Card key={i} title={`Violation ${i + 1}`} />
+                {data.map((item, index) => (
+                    <Card key={index} title={item.name} />
                 ))}
             </ScrollView>
         </View>
