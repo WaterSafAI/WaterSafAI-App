@@ -4,9 +4,10 @@ import { Color } from '../styles';
 import { useAuth } from "../services/AuthProvider";
 import { API_URL } from '../../constants';
 
-const Card = ({ title }) => (
+const Card = ({ item }) => (
     <View style={styles.card}>
-        <Text style={styles.cardText}>{title}</Text>
+        <Text style={styles.cardTitle}>{item.name}</Text>
+        <Text style={styles.cardText}>Location: {item.city}, {item.county}, {item.state}</Text>
     </View>
 );
 
@@ -20,8 +21,8 @@ const ViolationsScreen = () => {
     const [search, setSearch] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
     const [data, setDataArray] = useState([]);
-    const [filters, setFiltersArray] = useState([]);
     const {token} = useAuth();
+    const filters = ['County', 'City', 'State'];
 
     /**
      * This effect will populate the list of violations
@@ -38,21 +39,18 @@ const ViolationsScreen = () => {
                     },
                 };
 
-                const response = await fetch(`${API_URL}/violations/`, options); //May need to change
+                const response = await fetch(`${API_URL}/violations/`, options);
                 const json = await response.json();
 
-                const {filters, res} = json;  
-
                 // Set data
-                setDataArray(res);
-                setFiltersArray(filters);
+                setDataArray(json);
 
             } catch (error) {
                 console.error(`Error fetching violation list: ${error}`)
             }
         }
         fetchData();
-    })
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -74,7 +72,7 @@ const ViolationsScreen = () => {
             </View>
             <ScrollView>
                 {data.map((item, index) => (
-                    <Card key={index} title={item.name} />
+                    <Card key={index} item={item}/>
                 ))}
             </ScrollView>
         </View>
@@ -134,6 +132,11 @@ const styles = StyleSheet.create({
         color: '#0A3465',
         fontWeight: 'bold',
         fontSize: 16
+    },
+    cardTitle: {
+        color: '#0A3465',
+        fontWeight: 'bold',
+        fontSize: 20
     }
 });
 
