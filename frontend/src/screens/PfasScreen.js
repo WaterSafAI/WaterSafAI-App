@@ -4,9 +4,11 @@ import { Color } from '../styles';
 import { useAuth } from "../services/AuthProvider";
 import { API_URL } from '../../constants';
 
-const Card = ({ title }) => (
+const Card = ({ item }) => (
     <View style={styles.card}>
-        <Text style={styles.cardText}>{title}</Text>
+        <Text style={styles.cardTitle}>{item.name}</Text>
+        <Text style={styles.cardText}>Location: {item.city}, {item.county}, {item.state}</Text>
+        <Text style={styles.badText}>Detected Level: {item.detectedLevel}</Text>
     </View>
 );
 
@@ -20,68 +22,40 @@ const PfasScreen = () => {
     const [search, setSearch] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
     const [data, setDataArray] = useState([]);
-    const [filters, setFiltersArray] = useState([]);
-    const {token} = useAuth();
+    const { token } = useAuth();
 
-    // const filters = ['All', 'Isotopes', 'Multi Component'];
-    //     // Dummy data for example
-    //     const results = {
-    //         data: [
-    //             { name: '1-Pentafluoroethylethanol'},
-    //             { name: 'Perfluoroglutaryl difluoride'},
-    //             { name: '4:2 Fluorotelomer alcohol'},
-    //             { name: 'Sevoflurane'},
-    //             { name: '3:1 Fluorotelomer alcohol'},
-    //             { name: 'Perfluoropentanamide'},
-    //             { name: 'Methyl 2H,2H,3H,3H-perfluoroheptanoate'},
-    //             { name: 'Perfluorooctanoic acid'},
-    //             { name: '2H,2H,3H,3H-Perfluorooctanoic acid'},
-    //             { name: 'Perfluoroisobutyl methyl ether'},
-    //             { name: '6H-Perfluorohex-1-ene'},
-    //             { name: 'Potassium perfluorobutanesulfonate'},
-    //             { name: 'Nonafluoropentanamide'},
-    //             { name: '2-(Perfluorobutyl)-1-ethanesulfonic acid'},
-    //             { name: 'Methyl perfluorobutanoate'},
-    //             { name: '4H-Perfluorobutanoic acid'},
-    //             { name: 'Methyl perfluoroethyl ketone'},
-    //             { name: '2-(Trifluoromethoxy)ethyl trifluoromethanesulfonate'},
-    //             { name: 'Hexafluoroamylene glycol'},
-    //             { name: '2-(Perfluorohexyl)ethanol'},
-    //             { name: 'Perfluorobutanoic acid'},
-    //         ],
-    //     };
+    const filters = ['All', 'Isotopes', 'Multi Component'];
 
     /**
      * This effect will populate the list of PFAS
      */
-                useEffect(() => {
-                    const fetchData = async () => {
-                        try {
-                            // Construct request
-                            const options = {
-                                method: "GET",
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`
-                                },
-                            };
-            
-                            const response = await fetch(`${API_URL}/PFAS/`, options); //May need to change
-                            const json = await response.json();
-            
-                            const {filters, res} = json;  
-   
-                            // Set data
-                            setDataArray(res);
-                            setFiltersArray(filters);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Construct request
+                const options = {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                };
 
-                        } catch (error) {
-                            console.error(`Error fetching PFAS list: ${error}`)
-                        }
-                    }
-                    fetchData();
-                })
-        
+                const response = await fetch(`${API_URL}/pfas/`, options);
+                const json = await response.json();
+
+                console.log(json)
+
+                // Set data
+                setDataArray(json);
+
+            } catch (error) {
+                console.error(`Error fetching PFAS list: ${error}`)
+            }
+        }
+        fetchData();
+    }, [])
+
     return (
         <View style={styles.container}>
             <TextInput
@@ -102,7 +76,7 @@ const PfasScreen = () => {
             </View>
             <ScrollView>
                 {data.map((item, index) => (
-                    <Card key={index} title={item.name} />
+                    <Card key={index} item={item}/>
                 ))}
             </ScrollView>
         </View>
@@ -155,13 +129,23 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.8,
-        shadowRadius: 2,  
+        shadowRadius: 2,
         elevation: 5,
     },
     cardText: {
         color: '#0A3465',
         fontWeight: 'bold',
         fontSize: 16
+    },
+    badText: {
+        color: 'red',
+        fontWeight: 'bold',
+        fontSize: 16
+    },
+    cardTitle: {
+        color: '#0A3465',
+        fontWeight: 'bold',
+        fontSize: 20
     }
 });
 
