@@ -215,6 +215,38 @@ app.post('/results/:id', async (req, res) => {
     }
 });
 
+//////////
+// PFAS //
+//////////
+
+app.get('/pfas', async (req, res) => {
+    try {
+        const pfasRef = db.collection('pfas');
+        const snapshot = await pfasRef.get();
+        const pfas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        res.json(pfas);
+    } catch (error) {
+        console.error('Error fetching pfas: ', error);
+        res.status(500).send('Error fetching pfas');
+    }
+});
+
+////////////////
+// Violations //
+////////////////
+
+app.get('/violations', async (req, res) => {
+    try {
+        const violationsRef = db.collection('violations');
+        const snapshot = await violationsRef.get();
+        const violations = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        res.json(violations);
+    } catch (error) {
+        console.error('Error fetching violations: ', error);
+        res.status(500).send('Error fetching violations');
+    }
+});
+
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
