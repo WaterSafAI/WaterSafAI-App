@@ -43,7 +43,7 @@ const ViewResultsScreen = ({ navigation}) => {
             }
         }
         fetchData();
-    })
+    }, [])
 
     const handleViewSolutions = () => {
         navigation.navigate("View Solutions");
@@ -63,20 +63,20 @@ const ViewResultsScreen = ({ navigation}) => {
                     <View style={styles.modalView}>
                         {selectedItem && (
                             <>
-                                <Text style={styles.modalText}>Analysis: {selectedItem.analysis}</Text>
-                                <Text style={styles.modalText}>Result: {selectedItem.result}</Text>
-                                <Text style={styles.modalText}>Units: {selectedItem.units}</Text>
+                                <Text style={[styles.modalText, styles.modalTitle]}>{selectedItem.analysis}</Text>
+                                <Text style={styles.modalText}>{selectedItem.description}</Text>
                                 <Button
                                     title="Learn More"
+                                    style={[styles.button]}
                                     onPress={() => Linking.openURL('https://www.google.com/search?q=' + encodeURIComponent(selectedItem.analysis))}
                                 />
                             </>
                         )}
                         <Pressable
-                            style={[styles.button, styles.buttonClose]}
+                            style={[styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}
                         >
-                            <Text style={styles.textStyle}>Hide Modal</Text>
+                            <Text style={styles.textStyle}>X</Text>
                         </Pressable>
                     </View>
                 </View>
@@ -248,18 +248,26 @@ const styles = StyleSheet.create({
         elevation: 2
     },
     buttonClose: {
-        marginTop: 20,
-        backgroundColor: "#2196F3",
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        padding: 10,
     },
     textStyle: {
-        color: "white",
+        color: "gray",
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center",
+        fontSize: 20,
     },
     modalText: {
         marginBottom: 15,
         textAlign: "center"
-    }
+    },
+    modalTitle: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginBottom: 20,
+    },
 });
 
 export default ViewResultsScreen;
