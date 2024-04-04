@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, StyleSheet, Modal, Pressable, Button } from 'react-native';
+import * as Linking from 'expo-linking';
 import { Color } from '../styles';
 import { useAuth } from "../services/AuthProvider";
 import { API_URL } from '../../constants';
 
-const Card = ({ item }) => (
-    <View style={styles.card}>
+const Card = ({ item, onSelect }) => (
+    <TouchableOpacity style={styles.card} onPress={onSelect}>
         <Text style={styles.cardTitle}>{item.name}</Text>
         <Text style={styles.cardText}>Location: {item.city}, {item.county}, {item.state}</Text>
         <Text style={styles.badText}>Detected Level: {item.detectedLevel}</Text>
-    </View>
+    </TouchableOpacity>
 );
 
 const FilterPill = ({ label, selected, onSelect }) => (
@@ -22,6 +23,8 @@ const PfasScreen = () => {
     const [search, setSearch] = useState('');
     const [selectedFilter, setSelectedFilter] = useState('All');
     const [data, setDataArray] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
     const { token } = useAuth();
 
     const filters = ['All', 'Isotopes', 'Multi Component'];
@@ -44,8 +47,6 @@ const PfasScreen = () => {
                 const response = await fetch(`${API_URL}/pfas/`, options);
                 const json = await response.json();
 
-                console.log(json)
-
                 // Set data
                 setDataArray(json);
 
@@ -58,6 +59,36 @@ const PfasScreen = () => {
 
     return (
         <View style={styles.container}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        {selectedItem && (
+                            <>
+                                <Text style={[styles.modalText, styles.modalTitle]}>{selectedItem.name}</Text>
+                                <Text style={styles.modalText}>{selectedItem.description}</Text>
+                                <Button
+                                    title="Learn More"
+                                    style={[styles.button]}
+                                    onPress={() => Linking.openURL('https://www.google.com/search?q=' + encodeURIComponent(selectedItem.name))}
+                                />
+                                <Pressable
+                                    style={styles.buttonClose}
+                                    onPress={() => setModalVisible(!modalVisible)}
+                                >
+                                    <Text style={styles.textStyle}>X</Text>
+                                </Pressable>
+                            </>
+                        )}
+                    </View>
+                </View>
+            </Modal>
             <TextInput
                 style={styles.searchBar}
                 value={search}
@@ -76,7 +107,7 @@ const PfasScreen = () => {
             </View>
             <ScrollView>
                 {data.map((item, index) => (
-                    <Card key={index} item={item}/>
+                    <Card key={index} item={item} onSelect={() => { setSelectedItem(item); setModalVisible(true); }}/>
                 ))}
             </ScrollView>
         </View>
@@ -146,7 +177,54 @@ const styles = StyleSheet.create({
         color: '#0A3465',
         fontWeight: 'bold',
         fontSize: 20
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonClose: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        padding: 10,
+    },
+    textStyle: {
+        color: "gray",
+        fontWeight: "bold",
+        textAlign: "center",
+        fontSize: 20,
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    modalTitle: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginBottom: 20,
+    },
 });
 
 export default PfasScreen;
