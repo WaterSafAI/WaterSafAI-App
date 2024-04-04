@@ -247,6 +247,20 @@ app.get('/violations', async (req, res) => {
     }
 });
 
+/////////////
+// Results //
+/////////////
+app.get('/results', async (req, res) => {
+    try {
+        const resultsRef = db.collection('results');
+        const snapshot = await resultsRef.get();
+        const results = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        res.json(results);
+    } catch (error) {
+        console.error('Error fetching results: ', error);
+        res.status(500).send('Error fetching results');
+    }
+});
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
