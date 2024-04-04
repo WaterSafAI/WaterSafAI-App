@@ -1,31 +1,18 @@
 import React, { useState, useEffect }  from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Pressable, Modal, Button } from 'react-native';
 import { Buttons, Color } from '../styles';
 import { useAuth } from "../services/AuthProvider";
 import { API_URL } from '../../constants';
+import * as Linking from 'expo-linking';
 
 const ViewResultsScreen = ({ navigation}) => {
-
     const [companyName, setCompanyName] = useState('');
+    const [location, setLocation] = useState('');
     const [testDate, setTestDate] = useState('');
     const [data, setDataArray] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
     const {token} = useAuth();
-
-    // // Dummy data for example
-    // const results = {
-    //     companyName: 'Company name',
-    //     testDate: '08/28/2013',
-    //     data: [
-    //         { analysis: 'Total Coliform Bacteria', result: '50', units: '#/100ml' },
-    //         { analysis: 'Nitrate-Nitrogen', result: '4.55', units: 'mg/l' },
-    //         { analysis: 'pH', result: '7.50', units: 'units' },
-    //         { analysis: 'Iron', result: '0.55', units: 'mg/l' },
-    //         { analysis: 'Hardness as CaCo3', result: '280', units: 'mg/l' },
-    //         { analysis: 'Sulfate Sulfur', result: '32.0', units: 'mg/l' },
-    //         { analysis: 'Chlorine', result: '25.4', units: 'mg/l' },
-    //         { analysis: 'Specific Conductance', result: '344', units: 'umhos/cc' },
-    //     ],
-    // };
 
     /**
      * This effect will populate the test results for the given location.
@@ -42,15 +29,14 @@ const ViewResultsScreen = ({ navigation}) => {
                     },
                 };
 
-                const response = await fetch(`${API_URL}/results/`, options); //May need to change (Add specific location)
+                const response = await fetch(`${API_URL}/results/`, options);
                 const json = await response.json();
 
-                const {company, date, res} = json;
-
                 // Set data
-                setCompanyName(company);
-                setTestDate(date);
-                setDataArray(res);
+                setCompanyName(json[0].companyName);
+                setTestDate(json[0].testDate);
+                setDataArray(json[0].data);
+                setLocation(`${json[0].county}, ${json[0].city}, ${json[0].state}`);
 
             } catch (error) {
                 console.error(`Error fetching location's results: ${error}`)
@@ -65,14 +51,48 @@ const ViewResultsScreen = ({ navigation}) => {
 
     return (
         <ScrollView style={styles.container}>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        {selectedItem && (
+                            <>
+                                <Text style={styles.modalText}>Analysis: {selectedItem.analysis}</Text>
+                                <Text style={styles.modalText}>Result: {selectedItem.result}</Text>
+                                <Text style={styles.modalText}>Units: {selectedItem.units}</Text>
+                                <Button
+                                    title="Learn More"
+                                    onPress={() => Linking.openURL('https://www.google.com/search?q=' + encodeURIComponent(selectedItem.analysis))}
+                                />
+                            </>
+                        )}
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() => setModalVisible(!modalVisible)}
+                        >
+                            <Text style={styles.textStyle}>Hide Modal</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal>
             <Text style={styles.header}>Water Quality Results</Text>
             <Text style={{textAlign: 'center', marginBottom: 10}}>
                 <Text style={styles.subHeader}>Tested By: </Text>
                 <Text style={styles.subHeaderRes}>{companyName}</Text>
             </Text>
-            <Text style={{textAlign: 'center', marginBottom: 25}}>
+            <Text style={{textAlign: 'center', marginBottom: 10}}>
                 <Text style={styles.subHeader}>Test Date: </Text>
                 <Text style={styles.subHeaderRes}>{testDate}</Text>
+            </Text>
+            <Text style={{textAlign: 'center', marginBottom: 25}}>
+                <Text style={styles.subHeader}>Location: </Text>
+                <Text style={styles.subHeaderRes}>{location}</Text>
             </Text>
 
             <View style={styles.resultBox}>
@@ -87,12 +107,14 @@ const ViewResultsScreen = ({ navigation}) => {
                 {/* Results Rows */}
                 <View style={styles.resultsContainer}>
                     {data.map((item, index) => (
-                        <View key={index} style={styles.resultRow}>
-                            <Text style={styles.analysis}>{item.analysis}</Text>
-                            <Text style={styles.result}>{item.result}</Text>
-                            <Text>{"        "}</Text>
-                            <Text style={styles.units}>{item.units}</Text>
-                        </View>
+                        <Pressable key={index} onPress={() => {setSelectedItem(item); setModalVisible(true);}}>
+                            <View style={styles.resultRow}>
+                                <Text style={styles.analysis}>{item.analysis}</Text>
+                                <Text style={styles.result}>{item.result}</Text>
+                                <Text>{"        "}</Text>
+                                <Text style={styles.units}>{item.units}</Text>
+                            </View>
+                        </Pressable>
                     ))}
                 </View>
             </View>
@@ -199,6 +221,45 @@ const styles = StyleSheet.create({
     btnText: {
         ...Buttons.buttonText
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonClose: {
+        marginTop: 20,
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    }
 });
 
 export default ViewResultsScreen;
