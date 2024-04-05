@@ -6,10 +6,9 @@ import { API_URL } from '../../constants';
 import * as Linking from 'expo-linking';
 
 const ViewResultsScreen = ({ navigation}) => {
-    const [companyName, setCompanyName] = useState('');
-    const [location, setLocation] = useState('');
-    const [testDate, setTestDate] = useState('');
     const [data, setDataArray] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const {token} = useAuth();
@@ -33,10 +32,9 @@ const ViewResultsScreen = ({ navigation}) => {
                 const json = await response.json();
 
                 // Set data
-                setCompanyName(json[0].companyName);
-                setTestDate(json[0].testDate);
-                setDataArray(json[0].data);
-                setLocation(`${json[0].county}, ${json[0].city}, ${json[0].state}`);
+                setDataArray(json);
+                setCurrentPage(0);
+                setTotalPages(json.length);
 
             } catch (error) {
                 console.error(`Error fetching location's results: ${error}`)
@@ -81,43 +79,64 @@ const ViewResultsScreen = ({ navigation}) => {
                     </View>
                 </View>
             </Modal>
-            <Text style={styles.header}>Water Quality Results</Text>
-            <Text style={{textAlign: 'center', marginBottom: 10}}>
-                <Text style={styles.subHeader}>Tested By: </Text>
-                <Text style={styles.subHeaderRes}>{companyName}</Text>
-            </Text>
-            <Text style={{textAlign: 'center', marginBottom: 10}}>
-                <Text style={styles.subHeader}>Test Date: </Text>
-                <Text style={styles.subHeaderRes}>{testDate}</Text>
-            </Text>
-            <Text style={{textAlign: 'center', marginBottom: 25}}>
-                <Text style={styles.subHeader}>Location: </Text>
-                <Text style={styles.subHeaderRes}>{location}</Text>
-            </Text>
+            {data[currentPage] && (
+                <>
+                    <Text style={styles.header}>Water Quality Results</Text>
+                    <Text style={{textAlign: 'center', marginBottom: 8}}>
+                        <Text style={styles.subHeader}>Tested By: </Text>
+                        <Text style={styles.subHeaderRes}>{data[currentPage].companyName}</Text>
+                    </Text>
+                    <Text style={{textAlign: 'center', marginBottom: 8}}>
+                        <Text style={styles.subHeader}>Test Date: </Text>
+                        <Text style={styles.subHeaderRes}>{data[currentPage].testDate}</Text>
+                    </Text>
+                    <Text style={{textAlign: 'center', marginBottom: 12}}>
+                        <Text style={styles.subHeader}>Location: </Text>
+                        <Text style={styles.subHeaderRes}>{data[currentPage].county}, {data[currentPage].city}, {data[currentPage].state}</Text>
+                    </Text>
 
-            <View style={styles.resultBox}>
-                {/* Header Row */}
-                <View style={styles.resultRow}>
-                    <Text style={[styles.analysis, styles.headerText, styles.analysisHeader]}>Analysis</Text>
-                    <Text style={[styles.result, styles.headerText]}>Results</Text>
-                    <Text>{"        "}</Text>
-                    <Text style={[styles.units, styles.headerText]}>Units</Text>
-                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 }}>
+                        <Button
+                            title="Previous Page"
+                            disabled={currentPage === 0}
+                            onPress={() => {
+                                setCurrentPage(currentPage - 1);
+                            }}
+                        />
+                        <Button
+                            title="Next Page"
+                            disabled={currentPage === totalPages - 1}
+                            onPress={() => {
+                                setCurrentPage(currentPage + 1);
+                            }}
+                        />
+                    </View>
 
-                {/* Results Rows */}
-                <View style={styles.resultsContainer}>
-                    {data.map((item, index) => (
-                        <Pressable key={index} onPress={() => {setSelectedItem(item); setModalVisible(true);}}>
-                            <View style={styles.resultRow}>
-                                <Text style={styles.analysis}>{item.analysis}</Text>
-                                <Text style={styles.result}>{item.result}</Text>
-                                <Text>{"        "}</Text>
-                                <Text style={styles.units}>{item.units}</Text>
-                            </View>
-                        </Pressable>
-                    ))}
-                </View>
-            </View>
+                    <View style={styles.resultBox}>
+                        {/* Header Row */}
+                        <View style={styles.resultRow}>
+                            <Text style={[styles.analysis, styles.headerText, styles.analysisHeader]}>Analysis</Text>
+                            <Text style={[styles.result, styles.headerText]}>Results</Text>
+                            <Text>{"        "}</Text>
+                            <Text style={[styles.units, styles.headerText]}>Units</Text>
+                        </View>
+
+                        {/* Results Rows */}
+                        <View style={styles.resultsContainer}>
+                            {data[currentPage].data.map((item, index) => (
+                                <Pressable key={index} onPress={() => {setSelectedItem(item); setModalVisible(true);}}>
+                                    <View style={styles.resultRow}>
+                                        <Text style={styles.analysis}>{item.analysis}</Text>
+                                        <Text style={styles.result}>{item.result}</Text>
+                                        <Text>{"        "}</Text>
+                                        <Text style={styles.units}>{item.units}</Text>
+                                    </View>
+                                </Pressable>
+                            ))}
+                        </View>
+                    </View>
+                </>
+            )}
             
             <View style={{alignItems: 'center'}}>
                 {/* Solutions Button */}

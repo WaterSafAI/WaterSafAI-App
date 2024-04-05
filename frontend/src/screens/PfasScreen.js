@@ -45,6 +45,7 @@ const PfasScreen = () => {
                 };
 
                 const response = await fetch(`${API_URL}/pfas/`, options);
+
                 const json = await response.json();
 
                 // Set data

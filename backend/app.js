@@ -262,6 +262,21 @@ app.get('/results', async (req, res) => {
     }
 });
 
+///////////////
+// Solutions //
+///////////////
+app.get('/solutions', async (req, res) => {
+    try {
+        const solutionsRef = db.collection('solutions');
+        const snapshot = await solutionsRef.get();
+        const solutions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        res.json(solutions);
+    } catch (error) {
+        console.error('Error fetching solutions: ', error);
+        res.status(500).send('Error fetching solutions');
+    }
+});
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
