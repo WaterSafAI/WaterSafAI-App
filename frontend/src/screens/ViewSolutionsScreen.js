@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#f00',
         fontWeight: 'bold',
+        width: 90,
     },
     centeredView: {
         flex: 1,

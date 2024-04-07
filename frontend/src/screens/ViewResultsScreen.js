@@ -138,7 +138,7 @@ const ViewResultsScreen = ({ navigation}) => {
                 </>
             )}
             
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', marginBottom: 40}}>
                 {/* Solutions Button */}
                 <Pressable
                     onPress={handleViewSolutions}
