@@ -264,6 +264,11 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: '#0A3465',
         backgroundColor: '#66B3CC',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,  
+        elevation: 10,
     },
     plusText: {
         fontSize: 40,

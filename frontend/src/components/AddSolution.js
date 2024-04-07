@@ -88,7 +88,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         flexDirection: 'row',
         marginBottom: 15,
-        marginTop: 10
+        marginTop: 15,
+        borderRadius: 10,
+        shadowColor: '#0A3465',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,  
+        elevation: 10,
     },
     resultInput: {
         backgroundColor: '#D8EBF1',
@@ -102,6 +108,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginLeft: '2%',
         marginBottom: 40,
+        borderRadius: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,  
+        elevation: 5,
     },
     removeSolutionBtn: {
         height: 32,
@@ -117,7 +129,13 @@ const styles = StyleSheet.create({
     },
     removeBtn: {
         color: 'white',
-        fontSize: 18
+        fontSize: 18,
+        borderRadius: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,  
+        elevation: 3,
     },
 });
 
