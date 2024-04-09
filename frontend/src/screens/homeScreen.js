@@ -138,7 +138,7 @@ function HomeScreen(props) {
     }
     const handleDiscoverWaterQuality = () => {
         // Handle discover water quality button press
-        console.log('Calling backend to discover water quality');
+        navigation.navigate('Discover Water Quality');
     }
 
     const handleViewResults = () => {

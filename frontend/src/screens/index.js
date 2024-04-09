@@ -10,6 +10,7 @@ import PfasScreen from './PfasScreen';
 import MapScreen from './MapScreen';
 import ViewSolutionsScreen from './ViewSolutionsScreen';
 import AddSolutionScreen from './AddSolutionScreen';
+import WaterQualityScreen from './WaterQualityScreen';
 
 export { 
     Login, 
@@ -24,4 +25,5 @@ export {
     MapScreen,
     ViewSolutionsScreen,
     AddSolutionScreen,
+    WaterQualityScreen
 };

@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const haversine = require('haversine-distance');
 const { db, auth } = require('./firebase');
 
 // Init express
@@ -262,6 +263,77 @@ app.get('/results', async (req, res) => {
     }
 });
 
+/////////////
+// Samples //
+/////////////
+app.get('/samples', async (req, res) => {
+    try {
+        const lat = parseFloat(req.query.lat);
+        const long = parseFloat(req.query.long);
+        const radius = 10; // miles
+        const samplesRef = db.collection('samples');
+        const snapshot = await samplesRef.get();
+        
+        // Haversine formula expects a point object {latitude, longitude}
+        const inputPoint = { latitude: lat, longitude: long };
+
+        let samplesWithinRadius = [];
+        let chemicalSums = {
+            Chloramines: 0,
+            Conductivity: 0,
+            Hardness: 0,
+            Organic_carbon: 0,
+            Potability: 0,
+            Solids: 0,
+            Sulfate: 0,
+            Trihalomethanes: 0,
+            Turbidity: 0,
+            pH: 0,
+        };
+        let chemicalCounts = {
+            Chloramines: 0,
+            Conductivity: 0,
+            Hardness: 0,
+            Organic_carbon: 0,
+            Potability: 0,
+            Solids: 0,
+            Sulfate: 0,
+            Trihalomethanes: 0,
+            Turbidity: 0,
+            pH: 0,
+        };
+
+        snapshot.docs.forEach(doc => {
+            const data = doc.data();
+            const samplePoint = { latitude: data.latitude, longitude: data.longitude };
+            const distanceInMeters = haversine(inputPoint, samplePoint);
+            const distanceInMiles = distanceInMeters / 1609.34; // Convert meters to miles
+
+            if (distanceInMiles <= radius) {
+                samplesWithinRadius.push(data);
+                // Sum up the chemicals
+                Object.keys(chemicalSums).forEach(key => {
+                    if (data[key] !== undefined) {
+                        chemicalSums[key] += data[key];
+                        chemicalCounts[key] += 1;
+                    }
+                });
+            }
+        });
+
+        // Calculate averages
+        let averages = {};
+        Object.keys(chemicalSums).forEach(key => {
+            averages[key] = chemicalCounts[key] > 0 ? chemicalSums[key] / chemicalCounts[key] : null;
+        });
+
+        res.json({ averages });
+    } catch (error) {
+        console.error('Error fetching samples: ', error);
+        res.status(500).send('Error fetching samples');
+    }
+});
+
 ///////////////
 // Solutions //
 ///////////////
@@ -276,6 +348,8 @@ app.get('/solutions', async (req, res) => {
         res.status(500).send('Error fetching solutions');
     }
 });
+
+
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
