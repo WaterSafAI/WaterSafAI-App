@@ -37,14 +37,14 @@ function ProfileScreen({ navigation }) {
                 const json = await response.json();
 
                 // Deconstruct user document
-                const { displayName, email, plan, location, company } = json;
+                const { displayName, email, plan, location, companyName } = json;
 
                 // Set user data
                 setUserName(displayName);
                 setUserEmail(email);
                 setUserAccountType(plan);
                 setUserLocation(location);
-                setCompanyName(company);
+                setCompanyName(companyName);
             } catch (error) {
                 console.error(`Error fetching user data: ${error}`)
             }

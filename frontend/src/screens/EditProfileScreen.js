@@ -45,7 +45,7 @@ function EditProfileScreen({ navigation }) {
                 setUserEmail(email);
                 setUserAccountType(plan);
                 setUserLocation(location);
-                setCompanyName(company);
+                setCompanyName(companyName);
             } catch (error) {
                 console.error(`Error fetching user data: ${error}`)
             }
