@@ -38,7 +38,7 @@ const Toast = ({ message, type, duration = 3000 }) => {
 const styles = StyleSheet.create({
     toast: {
         position: 'absolute',
-        bottom: 0,
+        top: 0,
         left: 0,
         right: 0,
         margin: 20,

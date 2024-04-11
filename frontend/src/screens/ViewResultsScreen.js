@@ -27,22 +27,30 @@ const ViewResultsScreen = ({ navigation}) => {
                         'Authorization': `Bearer ${token}`
                     },
                 };
-
+    
                 const response = await fetch(`${API_URL}/results/`, options);
                 const json = await response.json();
-
-                // Set data
-                setDataArray(json);
+    
+                // Sort the fetched data by testDate in descending order
+                const sortedData = json.sort((a, b) => {
+                    // Convert testDate to Date objects for comparison
+                    const dateA = new Date(a.testDate.split('/').reverse().join('-'));
+                    const dateB = new Date(b.testDate.split('/').reverse().join('-'));
+                    return dateB - dateA; // For descending order, flip dateA and dateB for ascending order
+                });
+    
+                // Set data with the sorted array
+                setDataArray(sortedData);
                 setCurrentPage(0);
-                setTotalPages(json.length);
-
+                setTotalPages(sortedData.length);
+    
             } catch (error) {
                 console.error(`Error fetching location's results: ${error}`)
             }
         }
         fetchData();
     }, [])
-
+    
     const handleViewSolutions = () => {
         navigation.navigate("View Solutions");
     }

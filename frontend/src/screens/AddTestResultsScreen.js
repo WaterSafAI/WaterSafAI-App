@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Pressable, StyleSheet, TextInput, View, Text, TouchableOpacity, LayoutAnimation, Item, ScrollView } from 'react-native';
+import { TextInputMask } from 'react-native-masked-text';
 import { Screens, Inputs, Color, Buttons } from '../styles/index';
 import { useAuth } from "../services/AuthProvider";
 import Toast from "../components/Toast"
@@ -30,22 +31,20 @@ const AddTestResultsScreen = () => {
             return;
         }
 
-        const dateRegex = /^(0[1-9]|1[0-2])\/\d{4}$/;
+        const dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|1[0-9]|2[0-9]|3[01])\/\d{4}$/;
         if (testDate && !dateRegex.test(testDate)) {
-            setToast({ type: "error", message: "Please enter a valid date (mm/yyyy)." });
+            setToast({ type: "error", message: "Please enter a valid date (mm/dd/yyyy)." });
             return;
         }
 
-        const [month, year] = testDate.split('/');
         const results = valueArray.reduce((acc, item) => ({
             ...acc,
-            [String(item.pickerValue).toLowerCase().replace(/ /g, '_')]: Number(item.textInputValue)
+            [String(item.pickerValue)]: Number(item.textInputValue)
         }), {});
 
         // Construct request
         const payload = {
-            month: Number(month),
-            year: Number(year),
+            testDate: testDate,
             results: results
         };
         const options = {
@@ -130,14 +129,19 @@ const AddTestResultsScreen = () => {
                 Add Test Results
             </Text>
 
-            {/* Future: add validation restriction on date input */}
             <View style={styles.dateContainer}>
                 <Text style={styles.dateText}>Test Date:</Text>
-                <TextInput style={styles.dateInput}
-                    placeholder='mm/yyyy'
+                <TextInputMask
+                    type={'datetime'}
+                    options={{
+                        format: 'MM/DD/YYYY'
+                    }}
+                    value={testDate}
+                    onChangeText={text => setTestDate(text)}
+                    style={styles.dateInput}
+                    placeholder='MM/DD/YYYY'
                     placeholderTextColor='#644535'
-                    onChangeText={testDate => setTestDate(testDate)}>
-                </TextInput>
+                />
             </View>
             <View style={styles.header}>
                 <Text style={styles.headerTextType}>Type</Text>

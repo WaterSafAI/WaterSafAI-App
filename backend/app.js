@@ -3,6 +3,44 @@ const morgan = require('morgan');
 const haversine = require('haversine-distance');
 const { db, auth } = require('./firebase');
 
+// TODO: Put this in constants.js and import it here 
+const analysisLookup = {
+    "Total Coliform Bacteria": {
+        units: "#/100ml",
+        description: "Indicator of microbial contamination in water."
+    },
+    "Nitrate-Nitrogen": {
+        units: "mg/l",
+        description: "High levels can cause health issues, especially in infants."
+    },
+    "pH": {
+        units: "units",
+        description: "Measures acidity/alkalinity of water. Ideal range is 6.5-8.5."
+    },
+    "Iron": {
+        units: "mg/l",
+        description: "High levels can cause taste and staining issues."
+    },
+    "Hardness as CaCo3": {
+        units: "mg/l",
+        description: "Causes scale buildup in pipes and poor soap/detergent performance."
+    },
+    "Sulfate Sulfur": {
+        units: "mg/l",
+        description: "High levels can cause taste and odor issues."
+    },
+    "Chlorine": {
+        units: "mg/l",
+        description: "Used for disinfection, but high levels can cause taste and odor issues."
+    },
+    "Specific Conductance": {
+        units: "umhos/cc",
+        description: "Measures water’s ability to conduct electricity, often linked to total dissolved solids."
+    }
+    // Add other analysis types here as necessary.
+};
+
+
 // Init express
 const app = express();
 app.use(express.json());
@@ -175,15 +213,23 @@ app.delete('/users/:id', async (req, res) => {
 // User test results endpoints //
 /////////////////////////////////
 
+async function getUserInfo(userId) {
+    const userDoc = await db.doc(`users/${userId}`).get();
+    if (!userDoc.exists) {
+        throw new Error('User not found');
+    }
+    return userDoc.data();
+}
+
+
 ////////////
 // Create //
 ////////////
 
 /**
- * @route POST /results/:id
+ * @route POST /results
  * @description Adds a test result document to a subcollection under a user's document in Firestore.
  * @access Public or Private (depending on your requirements)
- * @param {string} id - The unique identifier of the user, obtained from the URL parameter.
  * @body {Object} payload - The test results to be stored.
  * @body {string} payload.result1 - Description of result1.
  * @body {string} payload.result2 - Description of result2.
@@ -196,18 +242,37 @@ app.post('/results/:id', async (req, res) => {
         const userId = req.params.id;
         const payload = req.body;
 
-        // Reference to the user's document
-        const userRef = db.collection('users').doc(userId);
+        // Get the user's company name from the database (and location TODO!!)
+        const userInfo = await getUserInfo(userId);
 
-        // Reference to the 'testResults' subcollection in the user's document
-        const resultsRef = userRef.collection('testResults');
+        // Transform the results payload into the required data array structure
+        let data = Object.entries(payload.results).map(([analysis, result]) => ({
+            analysis: analysis,
+            result: result.toString(),
+            units: analysisLookup[analysis].units,
+            description: analysisLookup[analysis].description,
+        }));
 
-        // Add the payload as a new document in the 'testResults' subcollection
-        const result = await resultsRef.add(payload);
+        // TODO: get the user's location from the database and use for city, county, state or store that in DB
 
+        // Construct the document to be added to the database
+        const document = {
+            companyName: userInfo.companyName,
+            city: 'Orlando', // Assuming these are constant
+            county: 'Orange County', // Assuming these are constant
+            state: 'FL', // Assuming these are constant
+            testDate: payload.testDate,
+            data: data
+        };
+
+        // Add the document to the 'results' collection in the database
+        const resultsRef = db.collection('results');
+        const result = await resultsRef.add(document);
+
+        // Respond with the added document's ID and other info
         res.status(201).json({
             id: result.id,
-            ...payload,
+            ...document,
             message: 'Test result added successfully.',
         });
     } catch (error) {
@@ -215,6 +280,7 @@ app.post('/results/:id', async (req, res) => {
         res.status(500).send('Error saving test results');
     }
 });
+
 
 //////////
 // PFAS //
@@ -349,7 +415,21 @@ app.get('/solutions', async (req, res) => {
     }
 });
 
-
+app.post('/solutions', async (req, res) => {
+    try {
+        const payload = req.body;
+        const solutionsRef = db.collection('solutions');
+        const result = await solutionsRef.add(payload);
+        res.status(201).json({
+            id: result.id,
+            ...payload,
+            message: 'Solution added successfully.',
+        });
+    } catch (error) {
+        console.error('Error saving solution: ', error);
+        res.status(500).send('Error saving solution');
+    }
+});
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
